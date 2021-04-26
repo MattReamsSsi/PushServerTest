@@ -28,5 +28,18 @@ namespace PushServerTest.Controllers
             PushServerDatabase.AddApiClientData(apiClientData);
             return new OkResult();
         }
+
+        [HttpPost("SendPushMessage")]
+        public IActionResult SendPushMessage(PushMessage pushMessage)
+        {
+            PushServerDatabase.UpdateMessageCount(pushMessage);
+            return new OkResult();
+        }
+
+        [HttpGet("GetUserDatas")]
+        public List<UserData> GetUserDatas()
+        {
+            return PushServerDatabase.GetUserDatas();
+        }
     }
 }

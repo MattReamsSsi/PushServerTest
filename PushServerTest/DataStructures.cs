@@ -18,4 +18,12 @@ namespace PushServerTest
         public Guid ApiClientId { get; set; }
         public int MessagesCount { get; set; }
     }
+
+    public class PushMessage
+    {
+        public Guid ApiClientId { get; set; }
+        public Guid UserId { get; set; }
+        public string Title { get; set; } = "";
+        public string MessageBody { get; set; } = "";
+    }
 }
