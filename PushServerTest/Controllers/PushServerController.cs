@@ -103,7 +103,7 @@ namespace PushServerTest.Controllers
                     Title = pushMessage.Title,
                     Body = pushMessage.MessageBody
                 },
-                Topic = $"ssi-topic-{pushMessage.ApiClientId}-{pushMessage.UserId}"
+                Topic = $"ssi-topic-{pushMessage.ApiClientId}--{pushMessage.UserId}"
             };
             return message;
         }
