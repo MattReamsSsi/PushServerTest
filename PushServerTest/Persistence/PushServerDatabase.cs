@@ -50,5 +50,26 @@ namespace PushServerTest.Persistence
             }
             db.SaveChanges();
         }
+
+        public static void UpdateMessagesCount(List<UserData> messagesCounts)
+        {
+            using var db = new PushServerDbContext();
+            foreach (var messageCount in messagesCounts)
+            {
+                if (db.ApiClientDatas.Any(v => v.Id == messageCount.ApiClientId))
+                {
+                    var userData = db.UserDatas.FirstOrDefault(v => v.Id == messageCount.Id && v.ApiClientId == messageCount.ApiClientId);
+                    if (userData == null)
+                    {
+                        db.Add(new UserData { Id = messageCount.Id, ApiClientId = messageCount.ApiClientId, MessagesCount = messageCount.MessagesCount});
+                    }
+                    else
+                    {
+                        userData.MessagesCount += messageCount.MessagesCount;
+                    }
+                }
+            }
+            db.SaveChanges();
+        }
     }
 }

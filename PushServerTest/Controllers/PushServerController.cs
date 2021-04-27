@@ -40,10 +40,39 @@ namespace PushServerTest.Controllers
             return ret;
         }
 
+        [HttpPost("SendPushMessages")]
+        public async Task<string> SendPushMessages(List<PushMessage> pushMessages)
+        {
+            var ret = await PushMessageSender.SendPushMessages(pushMessages);
+            PushServerDatabase.UpdateMessagesCount(PushServerLogic.GetMessagesCountsToAdd(pushMessages));
+            return ret;
+        }
+
         [HttpGet("GetUserDatas")]
         public List<UserData> GetUserDatas()
         {
             return PushServerDatabase.GetUserDatas();
+        }
+    }
+
+    static class PushServerLogic
+    {
+        public static List<UserData> GetMessagesCountsToAdd(List<PushMessage> pushMessages)
+        {
+            var userDatas = pushMessages.Select(v => new UserData{ApiClientId = v.ApiClientId, Id = v.UserId}).ToList();
+            var grouped = userDatas.GroupBy(v => new {v.ApiClientId, v.Id}).ToList();
+            var ret = new List<UserData>();
+            foreach (var group in grouped)
+            {
+                var userCount = new UserData
+                {
+                    ApiClientId = group.Key.ApiClientId,
+                    Id = group.Key.Id,
+                    MessagesCount = group.Count()
+                };
+                ret.Add(userCount);
+            }
+            return ret;
         }
     }
 
@@ -52,6 +81,21 @@ namespace PushServerTest.Controllers
         public static async Task<string> SendPushMessage(PushMessage pushMessage)
         {
             Init();
+            var message = GetMessage(pushMessage);
+            string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+            return "Successfully sent message: " + response;
+        }
+
+        public static async Task<string> SendPushMessages(List<PushMessage> pushMessages)
+        {
+            Init();
+            var messages = pushMessages.Select(GetMessage).ToList();
+            var response = await FirebaseMessaging.DefaultInstance.SendAllAsync(messages);
+            return "Success Count: " + response.SuccessCount;
+        }
+
+        private static Message GetMessage(PushMessage pushMessage)
+        {
             var message = new Message
             {
                 Notification = new Notification
@@ -61,8 +105,7 @@ namespace PushServerTest.Controllers
                 },
                 Topic = $"ssi-topic-{pushMessage.ApiClientId}-{pushMessage.UserId}"
             };
-            string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
-            return "Successfully sent message: " + response;
+            return message;
         }
 
         private static bool _initted;
