@@ -40,6 +40,7 @@ export const pushMessagesSlice = createSlice({
       })
       .addCase(fetchUserDatas.fulfilled, (state, action) => {
         state.userDatas = action.payload;
+        console.log(action.payload);
         state.status = 'idle';
       })
   }
@@ -47,10 +48,6 @@ export const pushMessagesSlice = createSlice({
 
 export const selectApiClientDatas = state => state.pushMessages.apiClientDatas;
 export const selectUserDatas = state => state.pushMessages.userDatas;
-export const selectStatus = state => {
-    console.log(JSON.stringify(state))
-    return state.pushMessages.status;
-}
-    
+export const selectStatus = state => state.pushMessages.status;
 
 export default pushMessagesSlice.reducer;
