@@ -1,31 +1,43 @@
 import React, { Component } from 'react';
 
-export class Counter extends Component {
-  static displayName = Counter.name;
+import { useSelector, useDispatch } from 'react-redux';
 
-  constructor(props) {
-    super(props);
-    this.state = { currentCount: 0 };
-    this.incrementCounter = this.incrementCounter.bind(this);
-  }
+import {
+  decrement,
+  increment,
+  incrementByAmount,
+  incrementAsync,
+  selectCount,
+} from '../reduxStuff/counterSlice';
 
-  incrementCounter() {
-    this.setState({
-      currentCount: this.state.currentCount + 1
-    });
-  }
+export const Counter = (props) => {
+  // static displayName = Counter.name;
 
-  render() {
-    return (
-      <div>
-        <h1>Counter</h1>
+  // constructor(props) {
+  //   super(props);
+  //   this.state = { currentCount: 0 };
+  //   this.incrementCounter = this.incrementCounter.bind(this);
+  // }
 
-        <p>This is a simple example of a React component.</p>
+  // incrementCounter() {
+  //   this.setState({
+  //     currentCount: this.state.currentCount + 1
+  //   });
+  // }
 
-        <p aria-live="polite">Current count: <strong>{this.state.currentCount}</strong></p>
+  const count = useSelector(selectCount);
 
-        <button className="btn btn-primary" onClick={this.incrementCounter}>Increment</button>
-      </div>
-    );
-  }
+  const dispatch = useDispatch();
+
+  return (
+    <div>
+      <h1>Counter</h1>
+
+      <p>This is a simple example of a React component.Matt!!!</p>
+
+      <p aria-live="polite">Current count: <strong>{count}</strong></p>
+
+      <button className="btn btn-primary" onClick={() => dispatch(increment())}>Increment</button>
+    </div>
+  );
 }
