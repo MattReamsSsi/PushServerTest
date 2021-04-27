@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import counterSlice from './counterSlice';
-import pushMessagesSlice from './pushMessagesSlice'
+import pushMessagesSlice from './pushMessagesSlice';
 
 export default configureStore({
   reducer: {
