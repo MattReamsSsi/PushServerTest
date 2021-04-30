@@ -23,7 +23,7 @@ const MessageDataView = () => {
 
     const status = useSelector(selectStatus);
     const apiClientDatas = useSelector(selectApiClientDatas) as ApiClientData[];
-    const userDatas = useSelector(selectUserDatas);
+    const userDatas = useSelector(selectUserDatas) as UserData[];
 
     const dispatch = useDispatch();
 
@@ -32,11 +32,9 @@ const MessageDataView = () => {
           <h1>Hello from message view</h1>
           <Button colorScheme="blue" onClick={() => dispatch(fetchAll())}>Button</Button>
           <h2>{status}</h2>
-          <h3>{JSON.stringify(apiClientDatas)}</h3>
-          <h4>{JSON.stringify(userDatas)}</h4>
 
           <Table variant="simple">
-          <TableCaption>API Clients</TableCaption>
+            <TableCaption>API Clients</TableCaption>
             <Thead>
               <Tr>
                 <Th>ID</Th>
@@ -48,8 +46,30 @@ const MessageDataView = () => {
               {
                 apiClientDatas.map(v => {
                   return <Tr>
+                          <Td>{v.id}</Td>
+                          <Td>{v.description}</Td>
+                        </Tr>
+                })
+              }
+            </Tbody>
+          </Table>
+
+          <Table variant="simple">
+            <TableCaption>Users</TableCaption>
+            <Thead>
+              <Tr>
+                <Th>ID</Th>
+                <Th>API Client ID</Th>
+                <Th>Messages</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {
+                userDatas.map(v => {
+                  return <Tr>
                     <Td>{v.id}</Td>
-                    <Td>{v.description}</Td>
+                    <Td>{v.apiClientId}</Td>
+                    <Td>{v.messagesCount}</Td>
                   </Tr>
                 })
               }
