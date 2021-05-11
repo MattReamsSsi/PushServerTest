@@ -17,6 +17,7 @@ namespace PushServerTest
         public Guid Id { get; set; }
         public Guid ApiClientId { get; set; }
         public int MessagesCount { get; set; }
+        public string Description { get; set; } = "";
     }
 
     public class PushMessage

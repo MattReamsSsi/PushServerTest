@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PushServerTest.Persistence;
 
 namespace PushServerTest.Migrations
 {
     [DbContext(typeof(PushServerDbContext))]
-    partial class PushServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210511133551_MattMigration2")]
+    partial class MattMigration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
