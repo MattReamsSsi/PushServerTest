@@ -22,12 +22,13 @@ import {
   Input,
   Text
 } from "@chakra-ui/react";
-import { ApiClientData, UserData } from '../DataStructures';
+import { ApiClientData, UserData, PushMessage } from '../DataStructures';
 import {
   fetchAll,
   selectApiClientDatas,
   selectUserDatas,
-  selectStatus
+  selectStatus,
+  sendPushMessage
 } from '../reduxStuff/pushMessagesSlice';
 
 const MessageDataView = () => {
@@ -109,8 +110,8 @@ const MessageDataView = () => {
 }
 
 const SendMessageView = () => {
+  const dispatch = useDispatch();
   const { apiClientId, userId }: { apiClientId: string, userId: string } = useParams();
-
   const [title, setTitle] = useState("");
   const [messageBody, setMessageBody] = useState("");
 
@@ -123,7 +124,7 @@ const SendMessageView = () => {
       <Text>Body: {messageBody}</Text>
       <Input placeholder="title" value={title} onChange={v => setTitle((v.target as any).value)}/>
       <Input placeholder="message body" value={messageBody} onChange={v => setMessageBody((v.target as any).value)}/>
-      <Button colorScheme="blue">Send</Button>
+      <Button colorScheme="blue" onClick={() => dispatch((sendPushMessage as any)({apiClientId: apiClientId, userId: userId, title: title, messageBody: messageBody}))}>Send</Button>
     </div>)
 }
 

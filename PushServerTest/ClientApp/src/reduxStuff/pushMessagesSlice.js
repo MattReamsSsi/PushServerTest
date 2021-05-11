@@ -15,6 +15,10 @@ export const fetchUserDatas = createAsyncThunk('pushMessages/fetchUserDatas', as
   return await PushApiClient.getUserDatas();
 });
 
+export const sendPushMessage = createAsyncThunk('pushMessages/sendPushMessage', async (pushMessage) => {
+  return await PushApiClient.sendPushMessage(pushMessage);
+});
+
 export const fetchAll = () => dispatch => {
     dispatch(fetchApiClientDatas());
     dispatch(fetchUserDatas());

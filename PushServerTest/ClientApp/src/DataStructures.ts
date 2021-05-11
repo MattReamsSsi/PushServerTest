@@ -9,3 +9,12 @@ export interface UserData {
     apiClientId: string;
     messagesCount: number;
 }
+
+export interface PushMessage {
+    apiClientId: string;
+    userId: string;
+    title: string;
+    messageBody: string;
+}
+
+

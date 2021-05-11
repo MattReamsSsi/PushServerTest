@@ -1,8 +1,13 @@
 import axios from 'axios';
-import { ApiClientData, UserData } from '../DataStructures';
+import { ApiClientData, PushMessage, UserData } from '../DataStructures';
 
 async function doGet(path: string) {
   const response = await axios.get(path);
+  return response.data;
+}
+
+async function doPost(path: string, data: any) {
+  const response = await axios.post(path, data);
   return response.data;
 }
 
@@ -14,6 +19,10 @@ export default class SsiApiClient {
 
   static async getUserDatas(): Promise<UserData[]> {
     return doGet(`pushserver/getUserDatas`);
+  }
+
+  static async sendPushMessage(pushMessage: PushMessage): Promise<string> {
+    return doPost(`pushserver/sendPushMessage`, pushMessage);
   }
 
 }
