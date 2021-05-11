@@ -84,7 +84,7 @@ const MessageDataView = () => {
                 <Td>{v.messagesCount}</Td>
                 <Td>
                   <Button colorScheme="blue">
-                    <Link to={`${match.url}/mattTestView`}>Send Message</Link>
+                    <Link to={`${match.url}/sendMessage/${v.apiClientId}/${v.id}`}>Send Message</Link>
                   </Button>
                 </Td>
               </Tr>
@@ -94,8 +94,8 @@ const MessageDataView = () => {
       </Table>
 
       <Switch>
-        <Route path={`${match.path}/mattTestView`}>
-          <MattTestView/>
+        <Route path={`${match.path}/sendMessage/:apiClientId/:userId`}>
+          <SendMessageView/>
         </Route>
         <Route path={match.path}>
           {/* nothing */}
@@ -106,8 +106,9 @@ const MessageDataView = () => {
   );
 }
 
-const MattTestView = () => {
-  return <div><h2>Matt Test View</h2></div>
+const SendMessageView = () => {
+  const { apiClientId, userId }: { apiClientId: string, userId: string } = useParams();
+  return <div><h2>Send Message View: {apiClientId} {userId}</h2></div>
 }
 
 export default MessageDataView;
