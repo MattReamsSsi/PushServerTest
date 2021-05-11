@@ -19,6 +19,8 @@ import {
   Th,
   Td,
   TableCaption,
+  Input,
+  Text
 } from "@chakra-ui/react";
 import { ApiClientData, UserData } from '../DataStructures';
 import {
@@ -108,7 +110,21 @@ const MessageDataView = () => {
 
 const SendMessageView = () => {
   const { apiClientId, userId }: { apiClientId: string, userId: string } = useParams();
-  return <div><h2>Send Message View: {apiClientId} {userId}</h2></div>
+
+  const [title, setTitle] = useState("");
+  const [messageBody, setMessageBody] = useState("");
+
+  return (
+    <div>
+      <h2>Send Message:</h2>
+      <h2>API Client ID: {apiClientId}</h2>
+      <h2>User ID: {userId}</h2>
+      <Text>Title: {title}</Text>
+      <Text>Body: {messageBody}</Text>
+      <Input placeholder="title" value={title} onChange={v => setTitle((v.target as any).value)}/>
+      <Input placeholder="message body" value={messageBody} onChange={v => setMessageBody((v.target as any).value)}/>
+      <Button colorScheme="blue">Send</Button>
+    </div>)
 }
 
 export default MessageDataView;
