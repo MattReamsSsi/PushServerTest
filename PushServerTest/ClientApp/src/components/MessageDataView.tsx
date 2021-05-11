@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
-  BrowserRouter,
   Switch,
   Route,
   Link,
@@ -84,7 +83,9 @@ const MessageDataView = () => {
                 <Td>{v.apiClientId}</Td>
                 <Td>{v.messagesCount}</Td>
                 <Td>
-                  <Button colorScheme="blue">Send Message</Button>
+                  <Button colorScheme="blue">
+                    <Link to={`${match.url}/mattTestView`}>Send Message</Link>
+                  </Button>
                 </Td>
               </Tr>
             })
@@ -92,8 +93,21 @@ const MessageDataView = () => {
         </Tbody>
       </Table>
 
+      <Switch>
+        <Route path={`${match.path}/mattTestView`}>
+          <MattTestView/>
+        </Route>
+        <Route path={match.path}>
+          {/* nothing */}
+        </Route>
+      </Switch>
+
     </div>
   );
+}
+
+const MattTestView = () => {
+  return <div><h2>Matt Test View</h2></div>
 }
 
 export default MessageDataView;
