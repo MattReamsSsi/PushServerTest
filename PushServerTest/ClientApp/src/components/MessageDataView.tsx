@@ -29,9 +29,8 @@ const MessageDataView = () => {
 
     return (
         <div>
-          <h1>Hello from message view</h1>
-          <Button colorScheme="blue" onClick={() => dispatch(fetchAll())}>Button</Button>
           <h2>{status}</h2>
+          <Button colorScheme="blue" onClick={() => dispatch(fetchAll())}>Fetch Data</Button>
 
           <Table variant="simple">
             <TableCaption>API Clients</TableCaption>
@@ -70,6 +69,9 @@ const MessageDataView = () => {
                     <Td>{v.id}</Td>
                     <Td>{v.apiClientId}</Td>
                     <Td>{v.messagesCount}</Td>
+                    <Td>
+                      <Button colorScheme="blue">Button</Button>
+                    </Td>
                   </Tr>
                 })
               }
