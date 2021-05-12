@@ -8,6 +8,7 @@ export interface UserData {
     id: string;
     apiClientId: string;
     messagesCount: number;
+    description: string;
 }
 
 export interface PushMessage {

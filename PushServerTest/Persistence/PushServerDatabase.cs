@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace PushServerTest.Persistence
@@ -31,6 +30,13 @@ namespace PushServerTest.Persistence
         {
             using var db = new PushServerDbContext();
             return db.UserDatas.ToList();
+        }
+
+        public static void AddUserData(UserData userData)
+        {
+            using var db = new PushServerDbContext();
+            db.Add(userData);
+            db.SaveChanges();
         }
 
         public static void UpdateMessageCount(PushMessage pushMessage)

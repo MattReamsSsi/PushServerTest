@@ -53,6 +53,12 @@ namespace PushServerTest.Controllers
         {
             return PushServerDatabase.GetUserDatas();
         }
+        [HttpPost("AddUserData")]
+        public IActionResult AddUserData(UserData userData)
+        {
+            PushServerDatabase.AddUserData(userData);
+            return new OkResult();
+        }
     }
 
     static class PushServerLogic
