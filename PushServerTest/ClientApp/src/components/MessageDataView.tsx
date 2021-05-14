@@ -69,6 +69,10 @@ const MessageDataView = () => {
         </Tbody>
       </Table>
 
+      <Button colorScheme="blue">
+        <Link to={`${match.url}/addUser`}>Add UserData</Link>
+      </Button>
+
       <Table variant="simple">
         <TableCaption>Users</TableCaption>
         <Thead>
@@ -100,6 +104,9 @@ const MessageDataView = () => {
         <Route path={`${match.path}/sendMessage/:apiClientId/:userId`}>
           <SendMessageView/>
         </Route>
+        <Route path={`${match.path}/addUser`}>
+          {<AddUserDataView/>}
+        </Route>
         <Route path={match.path}>
           {/* nothing */}
         </Route>
@@ -107,6 +114,15 @@ const MessageDataView = () => {
 
     </div>
   );
+}
+
+const AddUserDataView = () => {
+  const [userGuid, setUserGuid] = useState("");
+  const [apiGuid, setApiGuid] = useState("");
+  return (
+    <div>
+      <h2>Add User View</h2>
+    </div>)
 }
 
 const SendMessageView = () => {
