@@ -122,6 +122,7 @@ const AddUserDataView = () => {
   const [userGuid, setUserGuid] = useState("");
   const [apiGuid, setApiGuid] = useState("");
   const [userGuidIsValid, setUserGuidIsValid] = useState(false);
+  const [apiGuidIsValid, setApiGuidIsValid] = useState(false);
 
   return (
     <div>
@@ -132,8 +133,13 @@ const AddUserDataView = () => {
         setUserGuid(val);
         setUserGuidIsValid(guidPattern.test(val));
       }}/>
-      <Text>ApiGuid: {apiGuid}</Text>
-      <Input placeholder="apiGuid" value={apiGuid} onChange={v => setApiGuid((v.target as any).value)}/>
+      <Text>ApiGuid: {apiGuid}, Is Valid: {apiGuidIsValid.toString()}</Text>
+      <Input placeholder="apiGuid" value={apiGuid} onChange={v => {
+        const val = (v.target as any).value;
+        setApiGuid(val);
+        setApiGuidIsValid(guidPattern.test(val));
+      }}/>
+      <Button colorScheme="blue" isDisabled={!(userGuidIsValid && apiGuidIsValid)}>Commit User Data</Button>
     </div>);
 }
 
