@@ -116,13 +116,25 @@ const MessageDataView = () => {
   );
 }
 
+const guidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 const AddUserDataView = () => {
   const [userGuid, setUserGuid] = useState("");
   const [apiGuid, setApiGuid] = useState("");
+  const [userGuidIsValid, setUserGuidIsValid] = useState(false);
+
   return (
     <div>
-      <h2>Add User View</h2>
-    </div>)
+      <h2>Add User:</h2>
+      <Text>UserGuid: {userGuid}, Is Valid: {userGuidIsValid.toString()}</Text>
+      <Input placeholder="userGuid" value={userGuid} onChange={v => {
+        const val = (v.target as any).value;
+        setUserGuid(val);
+        setUserGuidIsValid(guidPattern.test(val));
+      }}/>
+      <Text>ApiGuid: {apiGuid}</Text>
+      <Input placeholder="apiGuid" value={apiGuid} onChange={v => setApiGuid((v.target as any).value)}/>
+    </div>);
 }
 
 const SendMessageView = () => {
@@ -137,8 +149,8 @@ const SendMessageView = () => {
       <h2>API Client ID: {apiClientId}</h2>
       <h2>User ID: {userId}</h2>
       <Text>Title: {title}</Text>
-      <Text>Body: {messageBody}</Text>
       <Input placeholder="title" value={title} onChange={v => setTitle((v.target as any).value)}/>
+      <Text>Body: {messageBody}</Text>
       <Input placeholder="message body" value={messageBody} onChange={v => setMessageBody((v.target as any).value)}/>
       <Button colorScheme="blue" onClick={() => dispatch((sendPushMessage as any)({apiClientId: apiClientId, userId: userId, title: title, messageBody: messageBody}))}>Send</Button>
     </div>)
