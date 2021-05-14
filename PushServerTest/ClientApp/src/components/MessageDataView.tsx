@@ -28,7 +28,8 @@ import {
   selectApiClientDatas,
   selectUserDatas,
   selectStatus,
-  sendPushMessage
+  sendPushMessage,
+  adduserData
 } from '../reduxStuff/pushMessagesSlice';
 
 const MessageDataView = () => {
@@ -119,14 +120,21 @@ const MessageDataView = () => {
 const guidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 const AddUserDataView = () => {
+  const dispatch = useDispatch();
   const [userGuid, setUserGuid] = useState("");
   const [apiGuid, setApiGuid] = useState("");
   const [userGuidIsValid, setUserGuidIsValid] = useState(false);
   const [apiGuidIsValid, setApiGuidIsValid] = useState(false);
+  const [userDescription, setUserDescription] = useState("");
 
   return (
     <div>
       <h2>Add User:</h2>
+      <Text>User Description: {userDescription}</Text>
+      <Input placeholder="user description" value={userDescription} onChange={v => {
+        const val = (v.target as any).value;
+        setUserDescription(val);
+      }}/>
       <Text>UserGuid: {userGuid}, Is Valid: {userGuidIsValid.toString()}</Text>
       <Input placeholder="userGuid" value={userGuid} onChange={v => {
         const val = (v.target as any).value;
@@ -139,7 +147,12 @@ const AddUserDataView = () => {
         setApiGuid(val);
         setApiGuidIsValid(guidPattern.test(val));
       }}/>
-      <Button colorScheme="blue" isDisabled={!(userGuidIsValid && apiGuidIsValid)}>Commit User Data</Button>
+      <Button
+        colorScheme="blue"
+        isDisabled={!(userGuidIsValid && apiGuidIsValid)}
+        onClick={() => dispatch((adduserData as any)({id: userGuid, apiClientId: apiGuid, messagesCount: 0, description: userDescription}))}>
+          Commit User Data
+        </Button>
     </div>);
 }
 
