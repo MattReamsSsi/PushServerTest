@@ -152,7 +152,7 @@ const AddUserDataView = () => {
         isDisabled={!(userGuidIsValid && apiGuidIsValid)}
         onClick={() => dispatch((adduserData as any)({id: userGuid, apiClientId: apiGuid, messagesCount: 0, description: userDescription}))}>
           Commit User Data
-        </Button>
+      </Button>
     </div>);
 }
 
