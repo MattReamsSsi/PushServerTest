@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
@@ -53,6 +53,10 @@ const MessageDataView = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  useEffect(() => {
+    dispatch(fetchAll());
+  }, [dispatch]);
+
   return (
     <div>
 
@@ -61,7 +65,7 @@ const MessageDataView = () => {
       <h2>Route Match: {match.path}</h2>
 
       <h2>{status}</h2>
-      <Button colorScheme="blue" onClick={() => dispatch(fetchAll())}>Fetch Data</Button>
+      <Button colorScheme="blue" onClick={() => dispatch(fetchAll())}>Refresh Data</Button>
 
       <Table variant="simple">
         <TableCaption>API Clients</TableCaption>
