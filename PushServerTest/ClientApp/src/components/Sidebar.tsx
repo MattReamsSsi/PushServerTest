@@ -1,6 +1,10 @@
 import React from 'react';
 
 import {
+  Link
+} from "react-router-dom";
+
+import {
     Box,
     Button,
     Drawer,
@@ -27,7 +31,7 @@ import {
         About
       </Button>
       <Button onClick={onClick} w="100%">
-        Contact
+        <Link to='/message-data'>Message Data</Link>
       </Button>
     </VStack>
   )

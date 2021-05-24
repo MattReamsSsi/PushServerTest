@@ -20,7 +20,16 @@ import {
   Td,
   TableCaption,
   Input,
-  Text
+  Text,
+  //Modal
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure
 } from "@chakra-ui/react";
 import { ApiClientData, UserData, PushMessage } from '../DataStructures';
 import {
@@ -42,8 +51,13 @@ const MessageDataView = () => {
 
   const dispatch = useDispatch();
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <div>
+
+      <AddUserDataModal isOpen={isOpen} onClose={onClose}/>
+
       <h2>Route Match: {match.path}</h2>
 
       <h2>{status}</h2>
@@ -70,9 +84,11 @@ const MessageDataView = () => {
         </Tbody>
       </Table>
 
-      <Button colorScheme="blue">
+      {/* <Button colorScheme="blue">
         <Link to={`${match.url}/addUser`}>Add UserData</Link>
-      </Button>
+      </Button> */}
+
+      <Button colorScheme="blue" onClick={onOpen}>Add User Data</Button>
 
       <Table variant="simple">
         <TableCaption>Users</TableCaption>
@@ -118,6 +134,28 @@ const MessageDataView = () => {
 }
 
 const guidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+const AddUserDataModal = ({isOpen, onClose}: any) => {
+  return (
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>something here</Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant="ghost">Secondary Action</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+  )
+}
 
 const AddUserDataView = () => {
   const dispatch = useDispatch();
