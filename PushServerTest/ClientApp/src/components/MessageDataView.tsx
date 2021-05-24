@@ -121,9 +121,6 @@ const MessageDataView = () => {
         <Route path={`${match.path}/sendMessage/:apiClientId/:userId`}>
           <SendMessageView/>
         </Route>
-        <Route path={`${match.path}/addUser`}>
-          {<AddUserDataView/>}
-        </Route>
         <Route path={match.path}>
           {/* nothing */}
         </Route>
@@ -136,28 +133,7 @@ const MessageDataView = () => {
 const guidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 const AddUserDataModal = ({isOpen, onClose}: any) => {
-  return (
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>something here</Text>
-          </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="ghost">Secondary Action</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-  )
-}
-
-const AddUserDataView = () => {
   const dispatch = useDispatch();
   const [userGuid, setUserGuid] = useState("");
   const [apiGuid, setApiGuid] = useState("");
@@ -166,32 +142,53 @@ const AddUserDataView = () => {
   const [userDescription, setUserDescription] = useState("");
 
   return (
-    <div>
-      <h2>Add User:</h2>
-      <Text>User Description: {userDescription}</Text>
-      <Input placeholder="user description" value={userDescription} onChange={v => {
-        const val = (v.target as any).value;
-        setUserDescription(val);
-      }}/>
-      <Text>UserGuid: {userGuid}, Is Valid: {userGuidIsValid.toString()}</Text>
-      <Input placeholder="userGuid" value={userGuid} onChange={v => {
-        const val = (v.target as any).value;
-        setUserGuid(val);
-        setUserGuidIsValid(guidPattern.test(val));
-      }}/>
-      <Text>ApiGuid: {apiGuid}, Is Valid: {apiGuidIsValid.toString()}</Text>
-      <Input placeholder="apiGuid" value={apiGuid} onChange={v => {
-        const val = (v.target as any).value;
-        setApiGuid(val);
-        setApiGuidIsValid(guidPattern.test(val));
-      }}/>
-      <Button
-        colorScheme="blue"
-        isDisabled={!(userGuidIsValid && apiGuidIsValid)}
-        onClick={() => dispatch((adduserData as any)({id: userGuid, apiClientId: apiGuid, messagesCount: 0, description: userDescription}))}>
-          Commit User Data
-      </Button>
-    </div>);
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add User</ModalHeader>
+          <ModalCloseButton />
+
+          <ModalBody>
+            <div>
+              <h2>Add User:</h2>
+              <Text>User Description: {userDescription}</Text>
+              <Input placeholder="user description" value={userDescription} onChange={v => {
+                const val = (v.target as any).value;
+                setUserDescription(val);
+              }}/>
+              <Text>UserGuid: {userGuid}, Is Valid: {userGuidIsValid.toString()}</Text>
+              <Input placeholder="userGuid" value={userGuid} onChange={v => {
+                const val = (v.target as any).value;
+                setUserGuid(val);
+                setUserGuidIsValid(guidPattern.test(val));
+              }}/>
+              <Text>ApiGuid: {apiGuid}, Is Valid: {apiGuidIsValid.toString()}</Text>
+              <Input placeholder="apiGuid" value={apiGuid} onChange={v => {
+                const val = (v.target as any).value;
+                setApiGuid(val);
+                setApiGuidIsValid(guidPattern.test(val));
+              }}/>
+              
+            </div>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button
+                colorScheme="blue"
+                isDisabled={!(userGuidIsValid && apiGuidIsValid)}
+                onClick={() => {
+                  dispatch((adduserData as any)({id: userGuid, apiClientId: apiGuid, messagesCount: 0, description: userDescription}));
+                  onClose();
+                }}>
+                  Commit User Data
+              </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+  )
 }
 
 const SendMessageView = () => {
