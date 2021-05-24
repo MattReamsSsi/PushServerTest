@@ -51,7 +51,10 @@ const MessageDataView = () => {
 
   const dispatch = useDispatch();
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedUserId, setSelectedUserId] = useState("");
+  const [selectedApiId, setSelectedApiId] = useState("");
+  const { isOpen: isOpenAddUser, onOpen: onOpenAddUser, onClose: onCloseAddUser } = useDisclosure();
+  const { isOpen: isOpenSendMessage, onOpen: onOpenSendMessage, onClose: onCloseSendMessage } = useDisclosure();
 
   useEffect(() => {
     dispatch(fetchAll());
@@ -60,15 +63,15 @@ const MessageDataView = () => {
   return (
     <div>
 
-      <AddUserDataModal isOpen={isOpen} onClose={onClose}/>
+      <AddUserDataModal isOpen={isOpenAddUser} onClose={onCloseAddUser}/>
+      <SendMessageModal isOpen={isOpenSendMessage} onClose={onCloseSendMessage} apiClientId={selectedApiId} userId={selectedUserId}/>
 
-      <h2>Route Match: {match.path}</h2>
+      {/* <h2>Route Match: {match.path}</h2> */}
 
-      <h2>{status}</h2>
-      <Button colorScheme="blue" onClick={() => dispatch(fetchAll())}>Refresh Data</Button>
+      <Button colorScheme="blue" onClick={() => dispatch(fetchAll())}>Refresh Data ({status})</Button>
 
       <Table variant="simple">
-        <TableCaption>API Clients</TableCaption>
+        <TableCaption placement='top'>API Clients</TableCaption>
         <Thead>
           <Tr>
             <Th>ID</Th>
@@ -92,10 +95,10 @@ const MessageDataView = () => {
         <Link to={`${match.url}/addUser`}>Add UserData</Link>
       </Button> */}
 
-      <Button colorScheme="blue" onClick={onOpen}>Add User Data</Button>
+      <Button colorScheme="blue" onClick={onOpenAddUser}>Add User Data</Button>
 
       <Table variant="simple">
-        <TableCaption>Users</TableCaption>
+        <TableCaption placement='top'>Users</TableCaption>
         <Thead>
           <Tr>
             <Th>ID</Th>
@@ -111,8 +114,12 @@ const MessageDataView = () => {
                 <Td>{v.apiClientId}</Td>
                 <Td>{v.messagesCount}</Td>
                 <Td>
-                  <Button colorScheme="blue">
-                    <Link to={`${match.url}/sendMessage/${v.apiClientId}/${v.id}`}>Send Message</Link>
+                  <Button colorScheme="blue" onClick={() => {
+                    setSelectedUserId(v.id);
+                    setSelectedApiId(v.apiClientId);
+                    onOpenSendMessage();
+                  }}>
+                    Send Message
                   </Button>
                 </Td>
               </Tr>
@@ -122,9 +129,9 @@ const MessageDataView = () => {
       </Table>
 
       <Switch>
-        <Route path={`${match.path}/sendMessage/:apiClientId/:userId`}>
+        {/* <Route path={`${match.path}/sendMessage/:apiClientId/:userId`}>
           <SendMessageView/>
-        </Route>
+        </Route> */}
         <Route path={match.path}>
           {/* nothing */}
         </Route>
@@ -195,23 +202,42 @@ const AddUserDataModal = ({isOpen, onClose}: any) => {
   )
 }
 
-const SendMessageView = () => {
+const SendMessageModal = ({isOpen, onClose, apiClientId, userId}: any) => {
+
   const dispatch = useDispatch();
-  const { apiClientId, userId }: { apiClientId: string, userId: string } = useParams();
   const [title, setTitle] = useState("");
   const [messageBody, setMessageBody] = useState("");
 
   return (
-    <div>
-      <h2>Send Message:</h2>
-      <h2>API Client ID: {apiClientId}</h2>
-      <h2>User ID: {userId}</h2>
-      <Text>Title: {title}</Text>
-      <Input placeholder="title" value={title} onChange={v => setTitle((v.target as any).value)}/>
-      <Text>Body: {messageBody}</Text>
-      <Input placeholder="message body" value={messageBody} onChange={v => setMessageBody((v.target as any).value)}/>
-      <Button colorScheme="blue" onClick={() => dispatch((sendPushMessage as any)({apiClientId: apiClientId, userId: userId, title: title, messageBody: messageBody}))}>Send</Button>
-    </div>)
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Send Message</ModalHeader>
+          <ModalCloseButton />
+
+          <ModalBody>
+          <div>
+            <h2>API Client ID: {apiClientId}</h2>
+            <h2>User ID: {userId}</h2>
+            <Text>Title: {title}</Text>
+            <Input placeholder="title" value={title} onChange={v => setTitle((v.target as any).value)}/>
+            <Text>Body: {messageBody}</Text>
+            <Input placeholder="message body" value={messageBody} onChange={v => setMessageBody((v.target as any).value)}/>
+          </div>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button colorScheme="blue" onClick={() => {
+              dispatch((sendPushMessage as any)({apiClientId: apiClientId, userId: userId, title: title, messageBody: messageBody}));
+              onClose();
+              }}>Send</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+  )
 }
 
 export default MessageDataView;
