@@ -33,7 +33,7 @@ import {
   adduserData
 } from '../reduxStuff/pushMessagesSlice';
 
-const MessageDataView = () => {
+const UserDataView = () => {
 
   const status = useSelector(selectStatus);
   const userDatas = useSelector(selectUserDatas) as UserData[];
@@ -191,4 +191,4 @@ const SendMessageModal = ({isOpen, onClose, apiClientId, userId}: any) => {
   )
 }
 
-export default MessageDataView;
+export default UserDataView;
