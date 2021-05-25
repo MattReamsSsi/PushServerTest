@@ -9,7 +9,8 @@ import {
     Td,
     TableCaption,
     Checkbox,
-    Button
+    Button,
+    VStack
 } from "@chakra-ui/react";
 import { ApiClientData } from '../DataStructures';
 import {
@@ -26,11 +27,16 @@ const ApiClientsView = () => {
 
     return (
         <div>
-            <Checkbox
-                isChecked={includeDeleted}
-                onChange={() => setIncludeDeleted(!includeDeleted)}>
-                Include Deleted
-            </Checkbox>
+
+            <VStack spacing="24px" align='flex-start'>
+                <Button colorScheme="blue">Add API-Client</Button>
+                <Checkbox
+                    isChecked={includeDeleted}
+                    onChange={() => setIncludeDeleted(!includeDeleted)}>
+                    Include Deleted
+                </Checkbox>
+            </VStack>
+
             <Table variant="simple">
                 <TableCaption placement='top'>API Clients</TableCaption>
                 <Thead>
