@@ -19,8 +19,16 @@ export const sendPushMessage = createAsyncThunk('pushMessages/sendPushMessage', 
   return await PushApiClient.sendPushMessage(pushMessage);
 });
 
-export const adduserData = createAsyncThunk('pushMessages/adduserData', async (userData) => {
-  return await PushApiClient.adduserData(userData);
+export const addUserData = createAsyncThunk('pushMessages/addUserData', async (userData, thunkAPI) => {
+  const ret = await PushApiClient.addUserData(userData);
+  thunkAPI.dispatch(fetchAll());
+  return ret;
+});
+
+export const addApiClientData = createAsyncThunk('pushMessages/addApiClientData', async (apiClientData, thunkAPI) => {
+  const ret =  await PushApiClient.addApiClientData(apiClientData);
+  thunkAPI.dispatch(fetchAll());
+  return ret;
 });
 
 export const fetchAll = () => dispatch => {

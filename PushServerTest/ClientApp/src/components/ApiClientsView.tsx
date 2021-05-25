@@ -25,7 +25,8 @@ import {
 } from "@chakra-ui/react";
 import { ApiClientData } from '../DataStructures';
 import {
-    selectApiClientDatas
+    selectApiClientDatas,
+    addApiClientData
 } from '../reduxStuff/pushMessagesSlice';
 import { useHistory } from "react-router-dom";
 
@@ -90,11 +91,9 @@ const guidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}
 const AddApiClientModal = ({ isOpen, onClose }: any) => {
 
     const dispatch = useDispatch();
-    const [userGuid, setUserGuid] = useState("");
     const [apiGuid, setApiGuid] = useState("");
-    const [userGuidIsValid, setUserGuidIsValid] = useState(false);
     const [apiGuidIsValid, setApiGuidIsValid] = useState(false);
-    const [userDescription, setUserDescription] = useState("");
+    const [apiDescription, setApiDescription] = useState("");
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -105,19 +104,13 @@ const AddApiClientModal = ({ isOpen, onClose }: any) => {
 
                 <ModalBody>
                     <div>
-                        <h2>Add User:</h2>
-                        <Text>User Description: {userDescription}</Text>
-                        <Input placeholder="user description" value={userDescription} onChange={v => {
+                        <h2>Add API-Client:</h2>
+                        <Text>API Description: {apiDescription}</Text>
+                        <Input placeholder="api description" value={apiDescription} onChange={v => {
                             const val = (v.target as any).value;
-                            setUserDescription(val);
+                            setApiDescription(val);
                         }} />
-                        <Text>UserGuid: {userGuid}, Is Valid: {userGuidIsValid.toString()}</Text>
-                        <Input placeholder="userGuid" value={userGuid} onChange={v => {
-                            const val = (v.target as any).value;
-                            setUserGuid(val);
-                            setUserGuidIsValid(guidPattern.test(val));
-                        }} />
-                        <Text>ApiGuid: {apiGuid}, Is Valid: {apiGuidIsValid.toString()}</Text>
+                        <Text>API Guid: {apiGuid}, Is Valid: {apiGuidIsValid.toString()}</Text>
                         <Input placeholder="apiGuid" value={apiGuid} onChange={v => {
                             const val = (v.target as any).value;
                             setApiGuid(val);
@@ -130,12 +123,12 @@ const AddApiClientModal = ({ isOpen, onClose }: any) => {
                 <ModalFooter>
                     <Button colorScheme="blue" mr={3} onClick={onClose}>
                         Close
-              </Button>
+                    </Button>
                     <Button
                         colorScheme="blue"
-                        isDisabled={!(userGuidIsValid && apiGuidIsValid)}
+                        isDisabled={!apiGuidIsValid}
                         onClick={() => {
-                            //dispatch((adduserData as any)({ id: userGuid, apiClientId: apiGuid, messagesCount: 0, description: userDescription }));
+                            dispatch((addApiClientData as any)({ id: apiGuid, description: apiDescription }));
                             onClose();
                         }}>
                         Commit User Data

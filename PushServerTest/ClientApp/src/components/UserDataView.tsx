@@ -30,7 +30,7 @@ import {
   selectUserDatas,
   selectStatus,
   sendPushMessage,
-  adduserData
+  addUserData
 } from '../reduxStuff/pushMessagesSlice';
 
 const UserDataView = () => {
@@ -138,7 +138,7 @@ const AddUserDataModal = ({isOpen, onClose}: any) => {
                 colorScheme="blue"
                 isDisabled={!(userGuidIsValid && apiGuidIsValid)}
                 onClick={() => {
-                  dispatch((adduserData as any)({id: userGuid, apiClientId: apiGuid, messagesCount: 0, description: userDescription}));
+                  dispatch((addUserData as any)({id: userGuid, apiClientId: apiGuid, messagesCount: 0, description: userDescription}));
                   onClose();
                 }}>
                   Commit User Data

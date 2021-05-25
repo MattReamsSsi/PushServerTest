@@ -25,8 +25,12 @@ export default class SsiApiClient {
     return doPost(`pushserver/sendPushMessage`, pushMessage);
   }
 
-  static async adduserData(userData: UserData): Promise<string> {
-    return doPost(`pushserver/adduserData`, userData);
+  static async addUserData(userData: UserData): Promise<string> {
+    return doPost(`pushserver/addUserData`, userData);
+  }
+
+  static async addApiClientData(apiClientData: ApiClientData): Promise<string> {
+    return doPost(`pushserver/addApiClientData`, apiClientData);
   }
 
 }
