@@ -59,6 +59,7 @@ const MessageDataView = () => {
         <TableCaption placement='top'>Users</TableCaption>
         <Thead>
           <Tr>
+            <Th>Description</Th>
             <Th>ID</Th>
             <Th>API Client ID</Th>
             <Th>Messages</Th>
@@ -68,6 +69,7 @@ const MessageDataView = () => {
           {
             userDatas.map(v => {
               return <Tr>
+                <Td>{v.description}</Td>
                 <Td>{v.id}</Td>
                 <Td>{v.apiClientId}</Td>
                 <Td>{v.messagesCount}</Td>
