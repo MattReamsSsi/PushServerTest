@@ -24,7 +24,8 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
-    Select
+    Select,
+    HStack
 } from "@chakra-ui/react";
 import { ApiClientData, UserData, PushMessage } from '../DataStructures';
 import {
@@ -35,7 +36,8 @@ import {
     sendPushMessage,
     addUserData,
     selectApiIdForUsersFilter,
-    setApiIdForUsersFilter
+    setApiIdForUsersFilter,
+    removeUserData
 } from '../reduxStuff/pushMessagesSlice';
 
 import { faEnvelope, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -62,13 +64,14 @@ const UserDataView = () => {
 
             <AddUserDataModal isOpen={isOpenAddUser} onClose={onCloseAddUser} />
             <SendMessageModal isOpen={isOpenSendMessage} onClose={onCloseSendMessage} apiClientId={selectedApiId} userId={selectedUserId} />
+            <RemoveUserModal isOpen={isOpenRemoveUserData} onClose={onCloseRemoveUserData} userId={selectedUserId} userDatas={userDatas} />
 
             <Button colorScheme="blue" onClick={onOpenAddUser}>Add User Data</Button>
 
             <Select placeholder="filter by API-Client" value={apiIdForUsersFilter} onChange={event => {
                 dispatch(setApiIdForUsersFilter((event.target as any).value));
             }}>
-                {apiClientDatas.map(v => {{return (<option value={v.id} key={v.id}>{v.id}</option>);}})}
+                {apiClientDatas.map(v => { { return (<option value={v.id} key={v.id}>{v.id}</option>); } })}
             </Select>
 
             <Table variant="simple">
@@ -85,28 +88,30 @@ const UserDataView = () => {
                 <Tbody>
                     {
                         filteredUserDatas.map(v => {
-                            return <Tr key={v.id+v.apiClientId}>
+                            return <Tr key={v.id + v.apiClientId}>
                                 <Td>{v.description}</Td>
                                 <Td>{v.id}</Td>
                                 <Td>{v.apiClientId}</Td>
                                 <Td>{v.messagesCount}</Td>
                                 <Td>
-                                    <Tooltip label="Send Message">
-                                        <IconButton aria-label="Send Message" icon={<FontAwesomeIcon icon={faEnvelope}/>} colorScheme="blue" onClick={() => {
+                                    <HStack spacing="12px">
+                                        <Tooltip label="Send Message">
+                                            <IconButton aria-label="Send Message" icon={<FontAwesomeIcon icon={faEnvelope}/>} colorScheme="blue" onClick={() => {
                                                 setSelectedUserId(v.id);
                                                 setSelectedApiId(v.apiClientId);
                                                 onOpenSendMessage();
                                             }}>
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip label="Remove User Data">
-                                        <IconButton aria-label="Remove User Data" icon={<FontAwesomeIcon icon={faTrash}/>} colorScheme="blue" onClick={() => {
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip label="Remove User Data">
+                                            <IconButton aria-label="Remove User Data" icon={<FontAwesomeIcon icon={faTrash}/>} colorScheme="blue" onClick={() => {
                                                 setSelectedUserId(v.id);
                                                 setSelectedApiId(v.apiClientId);
-                                                onOpenSendMessage();
+                                                onOpenRemoveUserData();
                                             }}>
-                                        </IconButton>
-                                    </Tooltip>
+                                            </IconButton>
+                                        </Tooltip>
+                                    </HStack>
                                 </Td>
                             </Tr>
                         })
@@ -163,7 +168,7 @@ const AddUserDataModal = ({ isOpen, onClose }: any) => {
                 <ModalFooter>
                     <Button colorScheme="blue" mr={3} onClick={onClose}>
                         Close
-            </Button>
+                    </Button>
                     <Button
                         colorScheme="blue"
                         isDisabled={!(userGuidIsValid && apiGuidIsValid)}
@@ -172,7 +177,7 @@ const AddUserDataModal = ({ isOpen, onClose }: any) => {
                             onClose();
                         }}>
                         Commit User Data
-              </Button>
+                    </Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
@@ -206,7 +211,7 @@ const SendMessageModal = ({ isOpen, onClose, apiClientId, userId }: any) => {
                 <ModalFooter>
                     <Button colorScheme="blue" mr={3} onClick={onClose}>
                         Close
-            </Button>
+                    </Button>
                     <Button colorScheme="blue" onClick={() => {
                         dispatch((sendPushMessage as any)({ apiClientId: apiClientId, userId: userId, title: title, messageBody: messageBody }));
                         onClose();
@@ -240,9 +245,9 @@ const RemoveUserModal = ({ isOpen, onClose, userId, userDatas }: any) => {
                 <ModalFooter>
                     <Button colorScheme="blue" mr={3} onClick={onClose}>
                         Cancel
-            </Button>
+                    </Button>
                     <Button colorScheme="blue" onClick={() => {
-                        //dispatch((sendPushMessage as any)({ apiClientId: apiClientId, userId: userId, title: title, messageBody: messageBody }));
+                        dispatch((removeUserData as any)(user));
                         onClose();
                     }}>OK</Button>
                 </ModalFooter>

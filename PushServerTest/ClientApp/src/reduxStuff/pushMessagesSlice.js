@@ -27,6 +27,12 @@ export const addUserData = createAsyncThunk('pushMessages/addUserData', async (u
   return ret;
 });
 
+export const removeUserData = createAsyncThunk('pushMessages/removeUserData', async (userData, thunkAPI) => {
+  const ret = await PushApiClient.deleteUserData(userData);
+  thunkAPI.dispatch(fetchAll());
+  return ret;
+});
+
 export const addApiClientData = createAsyncThunk('pushMessages/addApiClientData', async (apiClientData, thunkAPI) => {
   const ret =  await PushApiClient.addApiClientData(apiClientData);
   thunkAPI.dispatch(fetchAll());
