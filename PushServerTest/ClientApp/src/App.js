@@ -10,8 +10,8 @@ const App = () =>  {
   return (
     <Layout>
       <Route exact path='/' component={ApiClientsView} />
-      <Route path='/user-data' component={UserDataView} />
       <Route path='/api-clients' component={ApiClientsView} />
+      <Route path='/user-data' component={UserDataView} />
     </Layout>
   );
 }
