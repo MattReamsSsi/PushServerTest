@@ -15,12 +15,14 @@ import { ApiClientData } from '../DataStructures';
 import {
     selectApiClientDatas
 } from '../reduxStuff/pushMessagesSlice';
+import { useHistory } from "react-router-dom";
 
 const ApiClientsView = () => {
 
     const apiClientDatas = useSelector(selectApiClientDatas) as ApiClientData[];
     const [includeDeleted, setIncludeDeleted] = useState(false);
     const apiClientDatasToShow = includeDeleted ? apiClientDatas : apiClientDatas.filter(v => !v.isDeleted);
+    const history = useHistory();
 
     return (
         <div>
@@ -48,9 +50,7 @@ const ApiClientsView = () => {
                                 {includeDeleted && <Td>{v.isDeleted ? 'true' : ''}</Td>}
                                 <Td>
                                     <Button colorScheme="blue" onClick={() => {
-                                        // setSelectedUserId(v.id);
-                                        // setSelectedApiId(v.apiClientId);
-                                        // onOpenSendMessage();
+                                        history.push("/user-data");
                                     }}>
                                         Show Users
                                     </Button>
