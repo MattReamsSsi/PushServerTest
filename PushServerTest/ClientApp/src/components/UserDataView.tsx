@@ -38,7 +38,7 @@ import {
     setApiIdForUsersFilter
 } from '../reduxStuff/pushMessagesSlice';
 
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const UserDataView = () => {
@@ -53,6 +53,7 @@ const UserDataView = () => {
     const [selectedApiId, setSelectedApiId] = useState("");
     const { isOpen: isOpenAddUser, onOpen: onOpenAddUser, onClose: onCloseAddUser } = useDisclosure();
     const { isOpen: isOpenSendMessage, onOpen: onOpenSendMessage, onClose: onCloseSendMessage } = useDisclosure();
+    const { isOpen: isOpenRemoveUserData, onOpen: onOpenRemoveUserData, onClose: onCloseRemoveUserData } = useDisclosure();
 
     const filteredUserDatas = apiIdForUsersFilter === "" ? userDatas : userDatas.filter(v => v.apiClientId === apiIdForUsersFilter);
 
@@ -91,7 +92,15 @@ const UserDataView = () => {
                                 <Td>{v.messagesCount}</Td>
                                 <Td>
                                     <Tooltip label="Send Message">
-                                        <IconButton aria-label="Send Message" icon={<FontAwesomeIcon icon={faEnvelope} />} colorScheme="blue" onClick={() => {
+                                        <IconButton aria-label="Send Message" icon={<FontAwesomeIcon icon={faEnvelope}/>} colorScheme="blue" onClick={() => {
+                                                setSelectedUserId(v.id);
+                                                setSelectedApiId(v.apiClientId);
+                                                onOpenSendMessage();
+                                            }}>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip label="Remove User Data">
+                                        <IconButton aria-label="Remove User Data" icon={<FontAwesomeIcon icon={faTrash}/>} colorScheme="blue" onClick={() => {
                                                 setSelectedUserId(v.id);
                                                 setSelectedApiId(v.apiClientId);
                                                 onOpenSendMessage();
@@ -202,6 +211,40 @@ const SendMessageModal = ({ isOpen, onClose, apiClientId, userId }: any) => {
                         dispatch((sendPushMessage as any)({ apiClientId: apiClientId, userId: userId, title: title, messageBody: messageBody }));
                         onClose();
                     }}>Send</Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
+
+const RemoveUserModal = ({ isOpen, onClose, userId, userDatas }: any) => {
+
+    const dispatch = useDispatch();
+    const user = userDatas.filter((v: any) => v.id === userId)[0];
+    const description = user === undefined ? '' : user.description;
+
+    return (
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Remove User</ModalHeader>
+                <ModalCloseButton />
+
+                <ModalBody>
+                    <div>
+                        <h2>User ID: {userId}</h2>
+                        <h2>Description: {description}</h2>
+                    </div>
+                </ModalBody>
+
+                <ModalFooter>
+                    <Button colorScheme="blue" mr={3} onClick={onClose}>
+                        Cancel
+            </Button>
+                    <Button colorScheme="blue" onClick={() => {
+                        //dispatch((sendPushMessage as any)({ apiClientId: apiClientId, userId: userId, title: title, messageBody: messageBody }));
+                        onClose();
+                    }}>OK</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

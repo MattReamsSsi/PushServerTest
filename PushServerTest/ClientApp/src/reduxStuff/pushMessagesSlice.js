@@ -34,9 +34,9 @@ export const addApiClientData = createAsyncThunk('pushMessages/addApiClientData'
 });
 
 export const fetchAll = () => dispatch => {
-    dispatch(fetchApiClientDatas());
-    dispatch(fetchUserDatas());
-  };
+  dispatch(fetchApiClientDatas());
+  dispatch(fetchUserDatas());
+};
 
 export const pushMessagesSlice = createSlice({
   name: 'pushMessages',
