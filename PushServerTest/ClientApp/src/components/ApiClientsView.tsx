@@ -8,7 +8,8 @@ import {
     Th,
     Td,
     TableCaption,
-    Checkbox
+    Checkbox,
+    Button
 } from "@chakra-ui/react";
 import { ApiClientData } from '../DataStructures';
 import {
@@ -35,6 +36,7 @@ const ApiClientsView = () => {
                         <Th>ID</Th>
                         <Th>Description</Th>
                         {includeDeleted && <Th>Is Deleted</Th>}
+                        <Th></Th>
                     </Tr>
                 </Thead>
                 <Tbody>
@@ -43,6 +45,16 @@ const ApiClientsView = () => {
                             return <Tr>
                                 <Td>{v.id}</Td>
                                 <Td>{v.description}</Td>
+                                {includeDeleted && <Td>{v.isDeleted ? 'true' : ''}</Td>}
+                                <Td>
+                                    <Button colorScheme="blue" onClick={() => {
+                                        // setSelectedUserId(v.id);
+                                        // setSelectedApiId(v.apiClientId);
+                                        // onOpenSendMessage();
+                                    }}>
+                                        Show Users
+                                    </Button>
+                                </Td>
                             </Tr>
                         })
                     }

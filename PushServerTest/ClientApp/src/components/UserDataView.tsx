@@ -58,6 +58,7 @@ const UserDataView = () => {
             <Th>ID</Th>
             <Th>API Client ID</Th>
             <Th>Messages</Th>
+            <Th></Th>
           </Tr>
         </Thead>
         <Tbody>
