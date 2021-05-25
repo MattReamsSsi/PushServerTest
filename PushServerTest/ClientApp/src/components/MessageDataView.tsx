@@ -56,9 +56,9 @@ const MessageDataView = () => {
   const { isOpen: isOpenAddUser, onOpen: onOpenAddUser, onClose: onCloseAddUser } = useDisclosure();
   const { isOpen: isOpenSendMessage, onOpen: onOpenSendMessage, onClose: onCloseSendMessage } = useDisclosure();
 
-  useEffect(() => {
-    dispatch(fetchAll());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchAll());
+  // }, [dispatch]);
 
   return (
     <div>
