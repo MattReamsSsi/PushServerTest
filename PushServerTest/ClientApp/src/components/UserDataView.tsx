@@ -71,7 +71,7 @@ const UserDataView = () => {
             <Select placeholder="filter by API-Client" value={apiIdForUsersFilter} onChange={event => {
                 dispatch(setApiIdForUsersFilter((event.target as any).value));
             }}>
-                {apiClientDatas.map(v => { { return (<option value={v.id} key={v.id}>{v.id}</option>); } })}
+                {apiClientDatas.map(v => { { return (<option value={v.id} key={v.id}>{v.id}: {v.description}</option>); } })}
             </Select>
 
             <Table variant="simple">
