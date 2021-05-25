@@ -3,25 +3,21 @@ import { Container } from 'reactstrap';
 import { NavMenu } from './NavMenu';
 import Sidebar from './Sidebar';
 
-export class Layout extends Component {
-  static displayName = Layout.name;
+export const Layout = (props) => { 
+  return (
+    <div>
 
-  render () {
-    return (
-      <div>
+    <NavMenu />
 
-      <NavMenu />
+    <Sidebar
+      variant={'sidebar'}
+      isOpen={true}
+      onClose={() => {}}
+    />
 
-      <Sidebar
-        variant={'sidebar'}
-        isOpen={true}
-        onClose={() => {}}
-      />
-
-        <Container>
-          {this.props.children}
-        </Container>
-      </div>
-    );
-  }
+      <Container>
+        {props.children}
+      </Container>
+    </div>
+  );
 }
