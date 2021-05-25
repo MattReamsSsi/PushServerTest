@@ -1,28 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
-    Button,
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
     TableCaption,
-    Input,
-    Text,
     Checkbox
 } from "@chakra-ui/react";
-import { ApiClientData, UserData, PushMessage } from '../DataStructures';
+import { ApiClientData } from '../DataStructures';
 import {
-    fetchAll,
-    selectApiClientDatas,
-    selectUserDatas,
-    selectStatus,
-    sendPushMessage,
-    adduserData
+    selectApiClientDatas
 } from '../reduxStuff/pushMessagesSlice';
 
 const ApiClientsView = () => {
@@ -33,21 +23,18 @@ const ApiClientsView = () => {
 
     return (
         <div>
-            
-
             <Checkbox
                 isChecked={includeDeleted}
                 onChange={() => setIncludeDeleted(!includeDeleted)}>
                 Include Deleted
             </Checkbox>
-
             <Table variant="simple">
                 <TableCaption placement='top'>API Clients</TableCaption>
                 <Thead>
                     <Tr>
                         <Th>ID</Th>
                         <Th>Description</Th>
-                        <Th>Is Deleted</Th>
+                        {includeDeleted && <Th>Is Deleted</Th>}
                     </Tr>
                 </Thead>
                 <Tbody>
