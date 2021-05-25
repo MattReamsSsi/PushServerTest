@@ -27,18 +27,13 @@ import {
 
 const ApiClientsView = () => {
 
-    const status = useSelector(selectStatus);
     const apiClientDatas = useSelector(selectApiClientDatas) as ApiClientData[];
-
-    const dispatch = useDispatch();
-
     const [includeDeleted, setIncludeDeleted] = useState(false);
-
     const apiClientDatasToShow = includeDeleted ? apiClientDatas : apiClientDatas.filter(v => !v.isDeleted);
 
     return (
         <div>
-            <Button colorScheme="blue" onClick={() => dispatch(fetchAll())}>Refresh Data ({status})</Button>
+            
 
             <Checkbox
                 isChecked={includeDeleted}

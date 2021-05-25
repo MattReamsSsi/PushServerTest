@@ -35,10 +35,7 @@ import {
 
 const UserDataView = () => {
 
-  const status = useSelector(selectStatus);
   const userDatas = useSelector(selectUserDatas) as UserData[];
-
-  const dispatch = useDispatch();
 
   const [selectedUserId, setSelectedUserId] = useState("");
   const [selectedApiId, setSelectedApiId] = useState("");
@@ -50,8 +47,6 @@ const UserDataView = () => {
 
       <AddUserDataModal isOpen={isOpenAddUser} onClose={onCloseAddUser}/>
       <SendMessageModal isOpen={isOpenSendMessage} onClose={onCloseSendMessage} apiClientId={selectedApiId} userId={selectedUserId}/>
-
-      <Button colorScheme="blue" onClick={() => dispatch(fetchAll())}>Refresh Data ({status})</Button>
 
       <Button colorScheme="blue" onClick={onOpenAddUser}>Add User Data</Button>
 
