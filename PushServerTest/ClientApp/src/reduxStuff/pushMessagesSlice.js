@@ -4,7 +4,9 @@ import PushApiClient from './PushApiClient';
 const initialState = {
   apiClientDatas: [],
   userDatas: [],
-  status: 'not tried yet'
+  status: 'not tried yet',
+  //below are for ui changes
+  apiIdForUsersFilter: ''
 };
 
 export const fetchApiClientDatas = createAsyncThunk('pushMessages/fetchApiClientDatas', async () => {
@@ -40,7 +42,9 @@ export const pushMessagesSlice = createSlice({
   name: 'pushMessages',
   initialState : initialState,
   reducers: {
-    // omit reducer cases
+    setApiIdForUsersFilter: (state, action) => {
+      state.apiIdForUsersFilter = action.payload;
+    },
   },
   extraReducers: builder => {
     builder
@@ -65,5 +69,8 @@ export const pushMessagesSlice = createSlice({
 export const selectApiClientDatas = state => state.pushMessages.apiClientDatas;
 export const selectUserDatas = state => state.pushMessages.userDatas;
 export const selectStatus = state => state.pushMessages.status;
+export const selectApiIdForUsersFilter = state => state.pushMessages.apiIdForUsersFilter;
+
+export const { setApiIdForUsersFilter } = pushMessagesSlice.actions;
 
 export default pushMessagesSlice.reducer;

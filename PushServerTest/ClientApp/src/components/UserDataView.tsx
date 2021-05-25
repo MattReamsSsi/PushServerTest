@@ -31,21 +31,25 @@ import {
     selectUserDatas,
     selectStatus,
     sendPushMessage,
-    addUserData
+    addUserData,
+    selectApiIdForUsersFilter,
+    setApiIdForUsersFilter
 } from '../reduxStuff/pushMessagesSlice';
 
 const UserDataView = () => {
 
+    const dispatch = useDispatch();
+
     const userDatas = useSelector(selectUserDatas) as UserData[];
     const apiClientDatas = useSelector(selectApiClientDatas) as ApiClientData[];
+    const apiIdForUsersFilter = useSelector(selectApiIdForUsersFilter) as string;
 
     const [selectedUserId, setSelectedUserId] = useState("");
     const [selectedApiId, setSelectedApiId] = useState("");
     const { isOpen: isOpenAddUser, onOpen: onOpenAddUser, onClose: onCloseAddUser } = useDisclosure();
     const { isOpen: isOpenSendMessage, onOpen: onOpenSendMessage, onClose: onCloseSendMessage } = useDisclosure();
 
-    const [selectedFilterApiId, setSelectedFilterApiId] = useState("");
-    const filteredUserDatas = selectedFilterApiId === "" ? userDatas : userDatas.filter(v => v.apiClientId === selectedFilterApiId);
+    const filteredUserDatas = apiIdForUsersFilter === "" ? userDatas : userDatas.filter(v => v.apiClientId === apiIdForUsersFilter);
 
     return (
         <div>
@@ -55,8 +59,8 @@ const UserDataView = () => {
 
             <Button colorScheme="blue" onClick={onOpenAddUser}>Add User Data</Button>
 
-            <Select placeholder="filter by API-Client" value={selectedFilterApiId} onChange={event => {
-                setSelectedFilterApiId((event.target as any).value);
+            <Select placeholder="filter by API-Client" value={apiIdForUsersFilter} onChange={event => {
+                dispatch(setApiIdForUsersFilter((event.target as any).value));
             }}>
                 {apiClientDatas.map(v => {{return (<option value={v.id} key={v.id}>{v.id}</option>);}})}
             </Select>
