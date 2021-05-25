@@ -36,6 +36,9 @@ import {
     setApiIdForUsersFilter
 } from '../reduxStuff/pushMessagesSlice';
 
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const UserDataView = () => {
 
     const dispatch = useDispatch();
@@ -85,7 +88,7 @@ const UserDataView = () => {
                                 <Td>{v.apiClientId}</Td>
                                 <Td>{v.messagesCount}</Td>
                                 <Td>
-                                    <Button colorScheme="blue" onClick={() => {
+                                    <Button leftIcon={<FontAwesomeIcon icon={faCoffee} />} colorScheme="blue" onClick={() => {
                                         setSelectedUserId(v.id);
                                         setSelectedApiId(v.apiClientId);
                                         onOpenSendMessage();
