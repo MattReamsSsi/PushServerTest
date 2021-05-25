@@ -42,17 +42,20 @@ namespace PushServerTest.Persistence
         public static void UpdateMessageCount(PushMessage pushMessage)
         {
             using var db = new PushServerDbContext();
-            if (db.ApiClientDatas.Any(v => v.Id == pushMessage.ApiClientId))
+
+            if(!db.ApiClientDatas.Any(v => v.Id == pushMessage.ApiClientId))
             {
-                var userData = db.UserDatas.FirstOrDefault(v => v.Id == pushMessage.UserId && v.ApiClientId == pushMessage.ApiClientId);
-                if (userData == null)
-                {
-                    db.Add(new UserData {Id = pushMessage.UserId, ApiClientId = pushMessage.ApiClientId});
-                }
-                else
-                {
-                    userData.MessagesCount++;
-                }
+                db.Add(new ApiClientData { Id = pushMessage.ApiClientId });
+            }
+
+            var userData = db.UserDatas.FirstOrDefault(v => v.Id == pushMessage.UserId && v.ApiClientId == pushMessage.ApiClientId);
+            if (userData == null)
+            {
+                db.Add(new UserData { Id = pushMessage.UserId, ApiClientId = pushMessage.ApiClientId });
+            }
+            else
+            {
+                userData.MessagesCount++;
             }
             db.SaveChanges();
         }
@@ -62,17 +65,19 @@ namespace PushServerTest.Persistence
             using var db = new PushServerDbContext();
             foreach (var messageCount in messagesCounts)
             {
-                if (db.ApiClientDatas.Any(v => v.Id == messageCount.ApiClientId))
+                if (!db.ApiClientDatas.Any(v => v.Id == messageCount.ApiClientId))
                 {
-                    var userData = db.UserDatas.FirstOrDefault(v => v.Id == messageCount.Id && v.ApiClientId == messageCount.ApiClientId);
-                    if (userData == null)
-                    {
-                        db.Add(new UserData { Id = messageCount.Id, ApiClientId = messageCount.ApiClientId, MessagesCount = messageCount.MessagesCount});
-                    }
-                    else
-                    {
-                        userData.MessagesCount += messageCount.MessagesCount;
-                    }
+                    db.Add(new ApiClientData { Id = messageCount.ApiClientId });
+                }
+
+                var userData = db.UserDatas.FirstOrDefault(v => v.Id == messageCount.Id && v.ApiClientId == messageCount.ApiClientId);
+                if (userData == null)
+                {
+                    db.Add(new UserData { Id = messageCount.Id, ApiClientId = messageCount.ApiClientId, MessagesCount = messageCount.MessagesCount });
+                }
+                else
+                {
+                    userData.MessagesCount += messageCount.MessagesCount;
                 }
             }
             db.SaveChanges();
