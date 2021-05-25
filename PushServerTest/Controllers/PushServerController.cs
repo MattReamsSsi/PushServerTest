@@ -62,7 +62,7 @@ namespace PushServerTest.Controllers
         [HttpPost("DeleteUserData")]
         public IActionResult DeleteUserData(UserData userData)
         {
-            //nothing yet
+            PushServerDatabase.DeleteUserData(userData);
             return new OkResult();
         }
     }

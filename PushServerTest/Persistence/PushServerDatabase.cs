@@ -39,6 +39,13 @@ namespace PushServerTest.Persistence
             db.SaveChanges();
         }
 
+        public static void DeleteUserData(UserData userData)
+        {
+            using var db = new PushServerDbContext();
+            db.Remove(userData);
+            db.SaveChanges();
+        }
+
         public static void UpdateMessageCount(PushMessage pushMessage)
         {
             using var db = new PushServerDbContext();
