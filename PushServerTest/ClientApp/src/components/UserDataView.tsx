@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
+    IconButton,
+    Tooltip,
     Button,
     Table,
     Thead,
@@ -36,7 +38,7 @@ import {
     setApiIdForUsersFilter
 } from '../reduxStuff/pushMessagesSlice';
 
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const UserDataView = () => {
@@ -88,13 +90,14 @@ const UserDataView = () => {
                                 <Td>{v.apiClientId}</Td>
                                 <Td>{v.messagesCount}</Td>
                                 <Td>
-                                    <Button leftIcon={<FontAwesomeIcon icon={faCoffee} />} colorScheme="blue" onClick={() => {
-                                        setSelectedUserId(v.id);
-                                        setSelectedApiId(v.apiClientId);
-                                        onOpenSendMessage();
-                                    }}>
-                                        Send Message
-                                    </Button>
+                                    <Tooltip label="Send Message">
+                                        <IconButton aria-label="Send Message" icon={<FontAwesomeIcon icon={faEnvelope} />} colorScheme="blue" onClick={() => {
+                                                setSelectedUserId(v.id);
+                                                setSelectedApiId(v.apiClientId);
+                                                onOpenSendMessage();
+                                            }}>
+                                        </IconButton>
+                                    </Tooltip>
                                 </Td>
                             </Tr>
                         })
