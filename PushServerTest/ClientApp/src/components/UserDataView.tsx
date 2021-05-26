@@ -51,8 +51,7 @@ const UserDataView = () => {
     const apiClientDatas = useSelector(selectApiClientDatas) as ApiClientData[];
     const apiIdForUsersFilter = useSelector(selectApiIdForUsersFilter) as string;
 
-    const [selectedUserId, setSelectedUserId] = useState("");
-    const [selectedApiId, setSelectedApiId] = useState("");
+    const [selectedUser, setSelectedUser] = useState({} as UserData);
     const { isOpen: isOpenAddUser, onOpen: onOpenAddUser, onClose: onCloseAddUser } = useDisclosure();
     const { isOpen: isOpenSendMessage, onOpen: onOpenSendMessage, onClose: onCloseSendMessage } = useDisclosure();
     const { isOpen: isOpenRemoveUserData, onOpen: onOpenRemoveUserData, onClose: onCloseRemoveUserData } = useDisclosure();
@@ -60,13 +59,15 @@ const UserDataView = () => {
 
     const filteredUserDatas = apiIdForUsersFilter === "" ? userDatas : userDatas.filter(v => v.apiClientId === apiIdForUsersFilter);
 
+    const setSelectedUserDescription = (description: string) => setSelectedUser({...selectedUser, description});
+
     return (
         <div>
 
             <AddUserDataModal isOpen={isOpenAddUser} onClose={onCloseAddUser} />
-            <SendMessageModal isOpen={isOpenSendMessage} onClose={onCloseSendMessage} apiClientId={selectedApiId} userId={selectedUserId} />
-            <RemoveUserModal isOpen={isOpenRemoveUserData} onClose={onCloseRemoveUserData} userId={selectedUserId} userDatas={userDatas} />
-            <EditUserDescriptionModal isOpen={isOpenEditUserDescription} onClose={onCloseEditUserDescription} userId={selectedUserId} userDatas={userDatas} />
+            <SendMessageModal isOpen={isOpenSendMessage} onClose={onCloseSendMessage} selectedUser={selectedUser} />
+            <RemoveUserModal isOpen={isOpenRemoveUserData} onClose={onCloseRemoveUserData} selectedUser={selectedUser}/>
+            <EditUserDescriptionModal isOpen={isOpenEditUserDescription} onClose={onCloseEditUserDescription} selectedUser={selectedUser} setSelectedUserDescription={setSelectedUserDescription}/>
 
             <Button colorScheme="blue" onClick={onOpenAddUser}>Add User Data</Button>
 
@@ -99,24 +100,21 @@ const UserDataView = () => {
                                     <HStack spacing="12px">
                                         <Tooltip label="Send Message">
                                             <IconButton aria-label="Send Message" icon={<FontAwesomeIcon icon={faEnvelope}/>} colorScheme="blue" onClick={() => {
-                                                setSelectedUserId(v.id);
-                                                setSelectedApiId(v.apiClientId);
+                                                setSelectedUser(v);
                                                 onOpenSendMessage();
                                             }}>
                                             </IconButton>
                                         </Tooltip>
                                         <Tooltip label="Edit Description">
                                             <IconButton aria-label="Edit Description" icon={<FontAwesomeIcon icon={faEdit}/>} colorScheme="blue" onClick={() => {
-                                                setSelectedUserId(v.id);
-                                                setSelectedApiId(v.apiClientId);
+                                                setSelectedUser(v);
                                                 onOpenEditUserDescription();
                                             }}>
                                             </IconButton>
                                         </Tooltip>
                                         <Tooltip label="Remove User Data">
                                             <IconButton aria-label="Remove User Data" icon={<FontAwesomeIcon icon={faTrash}/>} colorScheme="blue" onClick={() => {
-                                                setSelectedUserId(v.id);
-                                                setSelectedApiId(v.apiClientId);
+                                                setSelectedUser(v);
                                                 onOpenRemoveUserData();
                                             }}>
                                             </IconButton>
@@ -194,7 +192,7 @@ const AddUserDataModal = ({ isOpen, onClose }: any) => {
     )
 }
 
-const SendMessageModal = ({ isOpen, onClose, apiClientId, userId }: any) => {
+const SendMessageModal = ({ isOpen, onClose, selectedUser }: any) => {
 
     const dispatch = useDispatch();
     const [title, setTitle] = useState("");
@@ -209,8 +207,8 @@ const SendMessageModal = ({ isOpen, onClose, apiClientId, userId }: any) => {
 
                 <ModalBody>
                     <div>
-                        <h2>API Client ID: {apiClientId}</h2>
-                        <h2>User ID: {userId}</h2>
+                        <h2>API Client ID: {selectedUser.apiClientId}</h2>
+                        <h2>User ID: {selectedUser.id}</h2>
                         <Text>Title: {title}</Text>
                         <Input placeholder="title" value={title} onChange={v => setTitle((v.target as any).value)} />
                         <Text>Body: {messageBody}</Text>
@@ -219,11 +217,17 @@ const SendMessageModal = ({ isOpen, onClose, apiClientId, userId }: any) => {
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={onClose}>
+                    <Button colorScheme="blue" mr={3} onClick={() =>{
+                        setTitle("");
+                        setMessageBody("");
+                        onClose();
+                    }}>
                         Close
                     </Button>
                     <Button colorScheme="blue" onClick={() => {
-                        dispatch((sendPushMessage as any)({ apiClientId: apiClientId, userId: userId, title: title, messageBody: messageBody }));
+                        dispatch((sendPushMessage as any)({ ...selectedUser, title: title, messageBody: messageBody }));
+                        setTitle("");
+                        setMessageBody("");
                         onClose();
                     }}>Send</Button>
                 </ModalFooter>
@@ -232,11 +236,10 @@ const SendMessageModal = ({ isOpen, onClose, apiClientId, userId }: any) => {
     )
 }
 
-const RemoveUserModal = ({ isOpen, onClose, userId, userDatas }: any) => {
+const RemoveUserModal = ({ isOpen, onClose, selectedUser }: any) => {
 
     const dispatch = useDispatch();
-    const user = userDatas.filter((v: any) => v.id === userId)[0];
-    const description = user === undefined ? '' : user.description;
+    const description = selectedUser.description;
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -247,7 +250,7 @@ const RemoveUserModal = ({ isOpen, onClose, userId, userDatas }: any) => {
 
                 <ModalBody>
                     <div>
-                        <h2>User ID: {userId}</h2>
+                        <h2>User ID: {selectedUser.id}</h2>
                         <h2>Description: {description}</h2>
                     </div>
                 </ModalBody>
@@ -257,7 +260,7 @@ const RemoveUserModal = ({ isOpen, onClose, userId, userDatas }: any) => {
                         Cancel
                     </Button>
                     <Button colorScheme="blue" onClick={() => {
-                        dispatch((removeUserData as any)(user));
+                        dispatch((removeUserData as any)(selectedUser));
                         onClose();
                     }}>OK</Button>
                 </ModalFooter>
@@ -266,11 +269,9 @@ const RemoveUserModal = ({ isOpen, onClose, userId, userDatas }: any) => {
     )
 }
 
-const EditUserDescriptionModal = ({ isOpen, onClose, userId, userDatas }: any) => {
+const EditUserDescriptionModal = ({ isOpen, onClose, selectedUser, setSelectedUserDescription }: any) => {
 
     const dispatch = useDispatch();
-    const user = userDatas.filter((v: any) => v.id === userId)[0];
-    const [description, setDescription] = useState(user === undefined ? '' : user.description);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -281,11 +282,11 @@ const EditUserDescriptionModal = ({ isOpen, onClose, userId, userDatas }: any) =
 
                 <ModalBody>
                     <div>
-                        <h2>User ID: {userId}</h2>
-                        <Text>User Description: {description}</Text>
-                        <Input placeholder="user description" value={description} onChange={v => {
+                        <h2>User ID: {selectedUser.id}</h2>
+                        <Text>User Description: {selectedUser.description}</Text>
+                        <Input placeholder="user description" value={selectedUser.description} onChange={v => {
                             const val = (v.target as any).value;
-                            setDescription(val);
+                            setSelectedUserDescription(val);
                         }} />
                     </div>
                 </ModalBody>
@@ -295,7 +296,7 @@ const EditUserDescriptionModal = ({ isOpen, onClose, userId, userDatas }: any) =
                         Cancel
                     </Button>
                     <Button colorScheme="blue" onClick={() => {
-                        dispatch((editUserDescription as any)({...user, description}));
+                        dispatch((editUserDescription as any)(selectedUser));
                         onClose();
                     }}>OK</Button>
                 </ModalFooter>
