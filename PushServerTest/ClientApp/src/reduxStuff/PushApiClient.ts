@@ -37,4 +37,8 @@ export default class SsiApiClient {
     return doPost(`pushserver/addApiClientData`, apiClientData);
   }
 
+  static async editUserDescription(userData: UserData): Promise<string> {
+    return doPost(`pushserver/editUserDescription`, userData);
+  }
+
 }

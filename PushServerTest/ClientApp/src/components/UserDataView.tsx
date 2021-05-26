@@ -15,7 +15,6 @@ import {
     TableCaption,
     Input,
     Text,
-    //Modal
     Modal,
     ModalOverlay,
     ModalContent,
@@ -37,10 +36,11 @@ import {
     addUserData,
     selectApiIdForUsersFilter,
     setApiIdForUsersFilter,
-    removeUserData
+    removeUserData,
+    editUserDescription
 } from '../reduxStuff/pushMessagesSlice';
 
-import { faEnvelope, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const UserDataView = () => {
@@ -56,6 +56,7 @@ const UserDataView = () => {
     const { isOpen: isOpenAddUser, onOpen: onOpenAddUser, onClose: onCloseAddUser } = useDisclosure();
     const { isOpen: isOpenSendMessage, onOpen: onOpenSendMessage, onClose: onCloseSendMessage } = useDisclosure();
     const { isOpen: isOpenRemoveUserData, onOpen: onOpenRemoveUserData, onClose: onCloseRemoveUserData } = useDisclosure();
+    const { isOpen: isOpenEditUserDescription, onOpen: onOpenEditUserDescription, onClose: onCloseEditUserDescription } = useDisclosure();
 
     const filteredUserDatas = apiIdForUsersFilter === "" ? userDatas : userDatas.filter(v => v.apiClientId === apiIdForUsersFilter);
 
@@ -65,6 +66,7 @@ const UserDataView = () => {
             <AddUserDataModal isOpen={isOpenAddUser} onClose={onCloseAddUser} />
             <SendMessageModal isOpen={isOpenSendMessage} onClose={onCloseSendMessage} apiClientId={selectedApiId} userId={selectedUserId} />
             <RemoveUserModal isOpen={isOpenRemoveUserData} onClose={onCloseRemoveUserData} userId={selectedUserId} userDatas={userDatas} />
+            <EditUserDescriptionModal isOpen={isOpenEditUserDescription} onClose={onCloseEditUserDescription} userId={selectedUserId} userDatas={userDatas} />
 
             <Button colorScheme="blue" onClick={onOpenAddUser}>Add User Data</Button>
 
@@ -100,6 +102,14 @@ const UserDataView = () => {
                                                 setSelectedUserId(v.id);
                                                 setSelectedApiId(v.apiClientId);
                                                 onOpenSendMessage();
+                                            }}>
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip label="Edit Description">
+                                            <IconButton aria-label="Edit Description" icon={<FontAwesomeIcon icon={faEdit}/>} colorScheme="blue" onClick={() => {
+                                                setSelectedUserId(v.id);
+                                                setSelectedApiId(v.apiClientId);
+                                                onOpenEditUserDescription();
                                             }}>
                                             </IconButton>
                                         </Tooltip>
@@ -248,6 +258,44 @@ const RemoveUserModal = ({ isOpen, onClose, userId, userDatas }: any) => {
                     </Button>
                     <Button colorScheme="blue" onClick={() => {
                         dispatch((removeUserData as any)(user));
+                        onClose();
+                    }}>OK</Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
+
+const EditUserDescriptionModal = ({ isOpen, onClose, userId, userDatas }: any) => {
+
+    const dispatch = useDispatch();
+    const user = userDatas.filter((v: any) => v.id === userId)[0];
+    const [description, setDescription] = useState(user === undefined ? '' : user.description);
+
+    return (
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Edit User Description</ModalHeader>
+                <ModalCloseButton />
+
+                <ModalBody>
+                    <div>
+                        <h2>User ID: {userId}</h2>
+                        <Text>User Description: {description}</Text>
+                        <Input placeholder="user description" value={description} onChange={v => {
+                            const val = (v.target as any).value;
+                            setDescription(val);
+                        }} />
+                    </div>
+                </ModalBody>
+
+                <ModalFooter>
+                    <Button colorScheme="blue" mr={3} onClick={onClose}>
+                        Cancel
+                    </Button>
+                    <Button colorScheme="blue" onClick={() => {
+                        dispatch((editUserDescription as any)({...user, description}));
                         onClose();
                     }}>OK</Button>
                 </ModalFooter>

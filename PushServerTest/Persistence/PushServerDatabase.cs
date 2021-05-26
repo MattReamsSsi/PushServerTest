@@ -46,6 +46,17 @@ namespace PushServerTest.Persistence
             db.SaveChanges();
         }
 
+        internal static void EditUserDescription(UserData userData)
+        {
+            using var db = new PushServerDbContext();
+            var result = db.UserDatas.SingleOrDefault(b => b.Id == userData.Id && b.ApiClientId == userData.ApiClientId);
+            if (result != null)
+            {
+                result.Description = userData.Description;
+                db.SaveChanges();
+            }
+        }
+
         public static void UpdateMessageCount(PushMessage pushMessage)
         {
             using var db = new PushServerDbContext();

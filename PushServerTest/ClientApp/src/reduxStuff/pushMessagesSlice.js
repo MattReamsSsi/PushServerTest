@@ -39,6 +39,12 @@ export const addApiClientData = createAsyncThunk('pushMessages/addApiClientData'
   return ret;
 });
 
+export const editUserDescription = createAsyncThunk('pushMessages/editUserDescription', async (userData, thunkAPI) => {
+  const ret = await PushApiClient.editUserDescription(userData);
+  thunkAPI.dispatch(fetchAll());
+  return ret;
+});
+
 export const fetchAll = () => dispatch => {
   dispatch(fetchApiClientDatas());
   dispatch(fetchUserDatas());

@@ -65,6 +65,12 @@ namespace PushServerTest.Controllers
             PushServerDatabase.DeleteUserData(userData);
             return new OkResult();
         }
+        [HttpPost("EditUserDescription")]
+        public IActionResult EditUserDescription(UserData userData)
+        {
+            PushServerDatabase.EditUserDescription(userData);
+            return new OkResult();
+        }
     }
 
     static class PushServerLogic
