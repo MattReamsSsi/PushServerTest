@@ -30,12 +30,15 @@ import {
     selectApiClientDatas,
     addApiClientData,
     setApiIdForUsersFilter,
-    editApiDescription
+    editApiDescription,
+    deleteApiClient
 } from '../reduxStuff/pushMessagesSlice';
 import { useHistory } from "react-router-dom";
 
-import { faUser, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import YesNoDialog from './YesNoDialog';
 
 const ApiClientsView = () => {
 
@@ -51,12 +54,19 @@ const ApiClientsView = () => {
 
     const { isOpen: isOpenAdd, onOpen: onOpenAdd, onClose: onCloseAdd } = useDisclosure();
     const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure();
+    const { isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure();
 
     return (
         <div>
 
             <AddApiClientModal isOpen={isOpenAdd} onClose={onCloseAdd} />
             <EditApiDescriptionModal isOpen={isOpenEdit} onClose={onCloseEdit} selectedApi={selectedApi} setSelectedApiDescription={setSelectedApiDescription}/>
+            <YesNoDialog
+                isOpen={isOpenDelete}
+                onClose={onCloseDelete}
+                title={'Remove API Client'}
+                text={`API ID: ${selectedApi.id}\nDescription: ${selectedApi.description}`}
+                onOk={() => dispatch((deleteApiClient as any)(selectedApi))}/>
 
             <VStack spacing="24px" align='flex-start'>
                 <Button colorScheme="blue" onClick={onOpenAdd}>Add API-Client</Button>
@@ -100,6 +110,15 @@ const ApiClientsView = () => {
                                             }}>
                                             </IconButton>
                                         </Tooltip>
+
+                                        <Tooltip label="Remove API Client">
+                                            <IconButton aria-label="Remove User Data" icon={<FontAwesomeIcon icon={faTrash}/>} colorScheme="blue" onClick={() => {
+                                                setSelectedApi(v);
+                                                onOpenDelete();
+                                            }}>
+                                            </IconButton>
+                                        </Tooltip>
+
                                     </HStack>
                                 </Td>
                             </Tr>
