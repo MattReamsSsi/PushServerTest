@@ -31,11 +31,12 @@ import {
     addApiClientData,
     setApiIdForUsersFilter,
     editApiDescription,
-    deleteApiClient
+    deleteApiClient,
+    restoreApiClient
 } from '../reduxStuff/pushMessagesSlice';
 import { useHistory } from "react-router-dom";
 
-import { faUser, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faEdit, faTrash, faTrashRestore } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import YesNoDialog from './YesNoDialog';
@@ -45,8 +46,8 @@ const ApiClientsView = () => {
     const dispatch = useDispatch();
 
     const apiClientDatas = useSelector(selectApiClientDatas) as ApiClientData[];
-    const [includeDeleted, setIncludeDeleted] = useState(false);
-    const apiClientDatasToShow = includeDeleted ? apiClientDatas : apiClientDatas.filter(v => !v.isDeleted);
+    const [showDeleted, setShowDeleted] = useState(false);
+    const apiClientDatasToShow = apiClientDatas.filter(v => v.isDeleted === showDeleted);
     const history = useHistory();
 
     const [selectedApi, setSelectedApi] = useState({} as ApiClientData);
@@ -55,6 +56,7 @@ const ApiClientsView = () => {
     const { isOpen: isOpenAdd, onOpen: onOpenAdd, onClose: onCloseAdd } = useDisclosure();
     const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure();
     const { isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure();
+    const { isOpen: isOpenRestore, onOpen: onOpenRestore, onClose: onCloseRestore } = useDisclosure();
 
     return (
         <div>
@@ -67,13 +69,19 @@ const ApiClientsView = () => {
                 title={'Remove API Client'}
                 text={`API ID: ${selectedApi.id}\nDescription: ${selectedApi.description}`}
                 onOk={() => dispatch((deleteApiClient as any)(selectedApi))}/>
+            <YesNoDialog
+                isOpen={isOpenRestore}
+                onClose={onCloseRestore}
+                title={'Restore API Client'}
+                text={`API ID: ${selectedApi.id}\nDescription: ${selectedApi.description}`}
+                onOk={() => dispatch((restoreApiClient as any)(selectedApi))}/>
 
             <VStack spacing="24px" align='flex-start'>
                 <Button colorScheme="blue" onClick={onOpenAdd}>Add API-Client</Button>
                 <Checkbox
-                    isChecked={includeDeleted}
-                    onChange={() => setIncludeDeleted(!includeDeleted)}>
-                    Include Deleted
+                    isChecked={showDeleted}
+                    onChange={() => setShowDeleted(!showDeleted)}>
+                    Show Deleted
                 </Checkbox>
             </VStack>
 
@@ -83,17 +91,34 @@ const ApiClientsView = () => {
                     <Tr>
                         <Th>ID</Th>
                         <Th>Description</Th>
-                        {includeDeleted && <Th>Is Deleted</Th>}
                         <Th></Th>
                     </Tr>
                 </Thead>
                 <Tbody>
                     {
-                        apiClientDatasToShow.map(v => {
+                        showDeleted
+                        ? apiClientDatasToShow.map(v => {
                             return <Tr>
                                 <Td>{v.id}</Td>
                                 <Td>{v.description}</Td>
-                                {includeDeleted && <Td>{v.isDeleted ? 'true' : ''}</Td>}
+                                <Td>
+                                    <HStack spacing="12px">
+                                        <Tooltip label="Remove API Client">
+                                            <IconButton aria-label="Undo Delete" icon={<FontAwesomeIcon icon={faTrashRestore}/>} colorScheme="blue" onClick={() => {
+                                                setSelectedApi(v);
+                                                onOpenRestore();
+                                            }}>
+                                            </IconButton>
+                                        </Tooltip>
+                                    </HStack>
+                                </Td>
+                            </Tr>
+                        })
+                        : apiClientDatasToShow.map(v => {
+                            return <Tr>
+                                <Td>{v.id}</Td>
+                                <Td>{v.description}</Td>
+                                {showDeleted && <Td>{v.isDeleted ? 'true' : ''}</Td>}
                                 <Td>
                                     <HStack spacing="12px">
                                         <Tooltip label="Show Users">
@@ -110,7 +135,6 @@ const ApiClientsView = () => {
                                             }}>
                                             </IconButton>
                                         </Tooltip>
-
                                         <Tooltip label="Remove API Client">
                                             <IconButton aria-label="Remove User Data" icon={<FontAwesomeIcon icon={faTrash}/>} colorScheme="blue" onClick={() => {
                                                 setSelectedApi(v);
@@ -118,7 +142,6 @@ const ApiClientsView = () => {
                                             }}>
                                             </IconButton>
                                         </Tooltip>
-
                                     </HStack>
                                 </Td>
                             </Tr>
@@ -145,7 +168,6 @@ const AddApiClientModal = ({ isOpen, onClose }: any) => {
             <ModalContent>
                 <ModalHeader>Add User</ModalHeader>
                 <ModalCloseButton />
-
                 <ModalBody>
                     <div>
                         <h2>Add API-Client:</h2>
@@ -163,7 +185,6 @@ const AddApiClientModal = ({ isOpen, onClose }: any) => {
 
                     </div>
                 </ModalBody>
-
                 <ModalFooter>
                     <Button colorScheme="blue" mr={3} onClick={onClose}>
                         Close
@@ -193,7 +214,6 @@ const EditApiDescriptionModal = ({ isOpen, onClose, selectedApi, setSelectedApiD
             <ModalContent>
                 <ModalHeader>Edit User Description</ModalHeader>
                 <ModalCloseButton />
-
                 <ModalBody>
                     <div>
                         <h2>API ID: {selectedApi.id}</h2>
@@ -204,7 +224,6 @@ const EditApiDescriptionModal = ({ isOpen, onClose, selectedApi, setSelectedApiD
                         }} />
                     </div>
                 </ModalBody>
-
                 <ModalFooter>
                     <Button colorScheme="blue" mr={3} onClick={onClose}>
                         Cancel
