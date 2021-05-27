@@ -31,6 +31,12 @@ namespace PushServerTest.Controllers
             PushServerDatabase.AddApiClientData(apiClientData);
             return new OkResult();
         }
+        [HttpPost("EditApiDescription")]
+        public IActionResult EditApiDescription(ApiClientData apiClientData)
+        {
+            PushServerDatabase.EditApiDescription(apiClientData);
+            return new OkResult();
+        }
 
         [HttpPost("SendPushMessage")]
         public async Task<string> SendPushMessage(PushMessage pushMessage)

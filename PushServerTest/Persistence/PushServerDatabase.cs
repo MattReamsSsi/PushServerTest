@@ -20,6 +20,17 @@ namespace PushServerTest.Persistence
             db.SaveChanges();
         }
 
+        internal static void EditApiDescription(ApiClientData apiClientData)
+        {
+            using var db = new PushServerDbContext();
+            var result = db.ApiClientDatas.FirstOrDefault(b => b.Id == apiClientData.Id);
+            if (result != null)
+            {
+                result.Description = apiClientData.Description;
+                db.SaveChanges();
+            }
+        }
+
         public static List<ApiClientData> GetApiClientDatas()
         {
             using var db = new PushServerDbContext();
@@ -49,7 +60,7 @@ namespace PushServerTest.Persistence
         internal static void EditUserDescription(UserData userData)
         {
             using var db = new PushServerDbContext();
-            var result = db.UserDatas.SingleOrDefault(b => b.Id == userData.Id && b.ApiClientId == userData.ApiClientId);
+            var result = db.UserDatas.FirstOrDefault(b => b.Id == userData.Id && b.ApiClientId == userData.ApiClientId);
             if (result != null)
             {
                 result.Description = userData.Description;

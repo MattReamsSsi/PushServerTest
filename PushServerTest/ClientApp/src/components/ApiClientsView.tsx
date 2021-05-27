@@ -29,11 +29,12 @@ import { ApiClientData } from '../DataStructures';
 import {
     selectApiClientDatas,
     addApiClientData,
-    setApiIdForUsersFilter
+    setApiIdForUsersFilter,
+    editApiDescription
 } from '../reduxStuff/pushMessagesSlice';
 import { useHistory } from "react-router-dom";
 
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ApiClientsView = () => {
@@ -45,15 +46,20 @@ const ApiClientsView = () => {
     const apiClientDatasToShow = includeDeleted ? apiClientDatas : apiClientDatas.filter(v => !v.isDeleted);
     const history = useHistory();
 
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [selectedApi, setSelectedApi] = useState({} as ApiClientData);
+    const setSelectedApiDescription = (description: string) => setSelectedApi({...selectedApi, description});
+
+    const { isOpen: isOpenAdd, onOpen: onOpenAdd, onClose: onCloseAdd } = useDisclosure();
+    const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure();
 
     return (
         <div>
 
-            <AddApiClientModal isOpen={isOpen} onClose={onClose} />
+            <AddApiClientModal isOpen={isOpenAdd} onClose={onCloseAdd} />
+            <EditApiDescriptionModal isOpen={isOpenEdit} onClose={onCloseEdit} selectedApi={selectedApi} setSelectedApiDescription={setSelectedApiDescription}/>
 
             <VStack spacing="24px" align='flex-start'>
-                <Button colorScheme="blue" onClick={onOpen}>Add API-Client</Button>
+                <Button colorScheme="blue" onClick={onOpenAdd}>Add API-Client</Button>
                 <Checkbox
                     isChecked={includeDeleted}
                     onChange={() => setIncludeDeleted(!includeDeleted)}>
@@ -79,18 +85,19 @@ const ApiClientsView = () => {
                                 <Td>{v.description}</Td>
                                 {includeDeleted && <Td>{v.isDeleted ? 'true' : ''}</Td>}
                                 <Td>
-                                    {/* <Button colorScheme="blue" onClick={() => {
-                                        dispatch(setApiIdForUsersFilter(v.id));
-                                        history.push("/user-data");
-                                    }}>
-                                        Show Users
-                                    </Button> */}
                                     <HStack spacing="12px">
                                         <Tooltip label="Show Users">
                                             <IconButton aria-label="Show Users" icon={<FontAwesomeIcon icon={faUser}/>} colorScheme="blue"  onClick={() => {
                                                     dispatch(setApiIdForUsersFilter(v.id));
                                                     history.push("/user-data");
                                                 }}>
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip label="Edit Description">
+                                            <IconButton aria-label="Edit Description" icon={<FontAwesomeIcon icon={faEdit}/>} colorScheme="blue" onClick={() => {
+                                                setSelectedApi(v);
+                                                onOpenEdit();
+                                            }}>
                                             </IconButton>
                                         </Tooltip>
                                     </HStack>
@@ -151,6 +158,42 @@ const AddApiClientModal = ({ isOpen, onClose }: any) => {
                         }}>
                         Commit User Data
                 </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
+
+const EditApiDescriptionModal = ({ isOpen, onClose, selectedApi, setSelectedApiDescription }: any) => {
+
+    const dispatch = useDispatch();
+
+    return (
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Edit User Description</ModalHeader>
+                <ModalCloseButton />
+
+                <ModalBody>
+                    <div>
+                        <h2>API ID: {selectedApi.id}</h2>
+                        <Text>API Description: {selectedApi.description}</Text>
+                        <Input placeholder="user description" value={selectedApi.description} onChange={v => {
+                            const val = (v.target as any).value;
+                            setSelectedApiDescription(val);
+                        }} />
+                    </div>
+                </ModalBody>
+
+                <ModalFooter>
+                    <Button colorScheme="blue" mr={3} onClick={onClose}>
+                        Cancel
+                    </Button>
+                    <Button colorScheme="blue" onClick={() => {
+                        dispatch((editApiDescription as any)(selectedApi));
+                        onClose();
+                    }}>OK</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
