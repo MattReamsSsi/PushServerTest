@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
 import {
     IconButton,
     Tooltip,
@@ -8,7 +7,6 @@ import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
@@ -27,12 +25,10 @@ import {
     HStack,
     VStack
 } from "@chakra-ui/react";
-import { ApiClientData, UserData, PushMessage } from '../DataStructures';
+import { ApiClientData, UserData } from '../DataStructures';
 import {
-    fetchAll,
     selectApiClientDatas,
     selectUserDatas,
-    selectStatus,
     sendPushMessage,
     addUserData,
     selectApiIdForUsersFilter,
@@ -40,10 +36,8 @@ import {
     removeUserData,
     editUserDescription
 } from '../reduxStuff/pushMessagesSlice';
-
 import { faEnvelope, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import YesNoDialog from './YesNoDialog';
 
 const UserDataView = () => {
@@ -52,6 +46,7 @@ const UserDataView = () => {
 
     const userDatas = useSelector(selectUserDatas) as UserData[];
     const apiClientDatas = useSelector(selectApiClientDatas) as ApiClientData[];
+    const apisFiltered = apiClientDatas.filter(v => !v.isDeleted);
     const apiIdForUsersFilter = useSelector(selectApiIdForUsersFilter) as string;
 
     const [selectedUser, setSelectedUser] = useState({} as UserData);
@@ -60,7 +55,9 @@ const UserDataView = () => {
     const { isOpen: isOpenRemoveUserData, onOpen: onOpenRemoveUserData, onClose: onCloseRemoveUserData } = useDisclosure();
     const { isOpen: isOpenEditUserDescription, onOpen: onOpenEditUserDescription, onClose: onCloseEditUserDescription } = useDisclosure();
 
-    const filteredUserDatas = apiIdForUsersFilter === "" ? userDatas : userDatas.filter(v => v.apiClientId === apiIdForUsersFilter);
+    const apiClientIds = apisFiltered.map(v => v.id);
+    const userDatasWithValidApi = userDatas.filter(v => apiClientIds.includes(v.apiClientId));
+    const filteredUserDatas = apiIdForUsersFilter === "" ? userDatasWithValidApi : userDatasWithValidApi.filter(v => v.apiClientId === apiIdForUsersFilter);
 
     const setSelectedUserDescription = (description: string) => setSelectedUser({...selectedUser, description});
 
@@ -82,7 +79,7 @@ const UserDataView = () => {
                 <Select placeholder="filter by API-Client" value={apiIdForUsersFilter} onChange={event => {
                     dispatch(setApiIdForUsersFilter((event.target as any).value));
                 }}>
-                    {apiClientDatas.map(v => { { return (<option value={v.id} key={v.id}>{v.id}: {v.description}</option>); } })}
+                    {apisFiltered.map(v => { { return (<option value={v.id} key={v.id}>{v.id}: {v.description}</option>); } })}
                 </Select>
             </VStack>
 
