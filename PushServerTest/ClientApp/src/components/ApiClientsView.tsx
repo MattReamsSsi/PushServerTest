@@ -13,7 +13,6 @@ import {
     VStack,
     Input,
     Text,
-    //Modal
     Modal,
     ModalOverlay,
     ModalContent,
@@ -21,7 +20,10 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    useDisclosure
+    useDisclosure,
+    HStack,
+    IconButton,
+    Tooltip
 } from "@chakra-ui/react";
 import { ApiClientData } from '../DataStructures';
 import {
@@ -30,6 +32,9 @@ import {
     setApiIdForUsersFilter
 } from '../reduxStuff/pushMessagesSlice';
 import { useHistory } from "react-router-dom";
+
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ApiClientsView = () => {
 
@@ -74,12 +79,21 @@ const ApiClientsView = () => {
                                 <Td>{v.description}</Td>
                                 {includeDeleted && <Td>{v.isDeleted ? 'true' : ''}</Td>}
                                 <Td>
-                                    <Button colorScheme="blue" onClick={() => {
+                                    {/* <Button colorScheme="blue" onClick={() => {
                                         dispatch(setApiIdForUsersFilter(v.id));
                                         history.push("/user-data");
                                     }}>
                                         Show Users
-                                    </Button>
+                                    </Button> */}
+                                    <HStack spacing="12px">
+                                        <Tooltip label="Show Users">
+                                            <IconButton aria-label="Show Users" icon={<FontAwesomeIcon icon={faUser}/>} colorScheme="blue"  onClick={() => {
+                                                    dispatch(setApiIdForUsersFilter(v.id));
+                                                    history.push("/user-data");
+                                                }}>
+                                            </IconButton>
+                                        </Tooltip>
+                                    </HStack>
                                 </Td>
                             </Tr>
                         })
