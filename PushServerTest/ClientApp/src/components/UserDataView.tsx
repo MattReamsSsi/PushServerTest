@@ -43,6 +43,8 @@ import {
 import { faEnvelope, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import YesNoDialog from './YesNoDialog';
+
 const UserDataView = () => {
 
     const dispatch = useDispatch();
@@ -66,7 +68,12 @@ const UserDataView = () => {
 
             <AddUserDataModal isOpen={isOpenAddUser} onClose={onCloseAddUser} />
             <SendMessageModal isOpen={isOpenSendMessage} onClose={onCloseSendMessage} selectedUser={selectedUser} />
-            <RemoveUserModal isOpen={isOpenRemoveUserData} onClose={onCloseRemoveUserData} selectedUser={selectedUser}/>
+            <YesNoDialog
+                isOpen={isOpenRemoveUserData}
+                onClose={onCloseRemoveUserData}
+                title={'Remove User'}
+                text={`User ID: ${selectedUser.id}\nDescription: ${selectedUser.description}`}
+                onOk={() => dispatch((removeUserData as any)(selectedUser))}/>
             <EditUserDescriptionModal isOpen={isOpenEditUserDescription} onClose={onCloseEditUserDescription} selectedUser={selectedUser} setSelectedUserDescription={setSelectedUserDescription}/>
 
             <Button colorScheme="blue" onClick={onOpenAddUser}>Add User Data</Button>
@@ -236,38 +243,38 @@ const SendMessageModal = ({ isOpen, onClose, selectedUser }: any) => {
     )
 }
 
-const RemoveUserModal = ({ isOpen, onClose, selectedUser }: any) => {
+// const RemoveUserModal = ({ isOpen, onClose, selectedUser }: any) => {
 
-    const dispatch = useDispatch();
-    const description = selectedUser.description;
+//     const dispatch = useDispatch();
+//     const description = selectedUser.description;
 
-    return (
-        <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>Remove User</ModalHeader>
-                <ModalCloseButton />
+//     return (
+//         <Modal isOpen={isOpen} onClose={onClose}>
+//             <ModalOverlay />
+//             <ModalContent>
+//                 <ModalHeader>Remove User</ModalHeader>
+//                 <ModalCloseButton />
 
-                <ModalBody>
-                    <div>
-                        <h2>User ID: {selectedUser.id}</h2>
-                        <h2>Description: {description}</h2>
-                    </div>
-                </ModalBody>
+//                 <ModalBody>
+//                     <div>
+//                         <h2>User ID: {selectedUser.id}</h2>
+//                         <h2>Description: {description}</h2>
+//                     </div>
+//                 </ModalBody>
 
-                <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={onClose}>
-                        Cancel
-                    </Button>
-                    <Button colorScheme="blue" onClick={() => {
-                        dispatch((removeUserData as any)(selectedUser));
-                        onClose();
-                    }}>OK</Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
-    )
-}
+//                 <ModalFooter>
+//                     <Button colorScheme="blue" mr={3} onClick={onClose}>
+//                         Cancel
+//                     </Button>
+//                     <Button colorScheme="blue" onClick={() => {
+//                         dispatch((removeUserData as any)(selectedUser));
+//                         onClose();
+//                     }}>OK</Button>
+//                 </ModalFooter>
+//             </ModalContent>
+//         </Modal>
+//     )
+// }
 
 const EditUserDescriptionModal = ({ isOpen, onClose, selectedUser, setSelectedUserDescription }: any) => {
 

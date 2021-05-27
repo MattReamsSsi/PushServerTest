@@ -31,6 +31,17 @@ namespace PushServerTest.Persistence
             }
         }
 
+        internal static void DeleteApiClient(ApiClientData apiClientData)
+        {
+            using var db = new PushServerDbContext();
+            var result = db.ApiClientDatas.FirstOrDefault(b => b.Id == apiClientData.Id);
+            if (result != null)
+            {
+                result.IsDeleted = true;
+                db.SaveChanges();
+            }
+        }
+
         public static List<ApiClientData> GetApiClientDatas()
         {
             using var db = new PushServerDbContext();

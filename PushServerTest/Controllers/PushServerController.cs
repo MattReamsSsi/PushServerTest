@@ -37,6 +37,12 @@ namespace PushServerTest.Controllers
             PushServerDatabase.EditApiDescription(apiClientData);
             return new OkResult();
         }
+        [HttpPost("DeleteApiClient")]
+        public IActionResult DeleteApiClient(ApiClientData apiClientData)
+        {
+            PushServerDatabase.DeleteApiClient(apiClientData);
+            return new OkResult();
+        }
 
         [HttpPost("SendPushMessage")]
         public async Task<string> SendPushMessage(PushMessage pushMessage)
