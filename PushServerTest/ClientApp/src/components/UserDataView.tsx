@@ -24,7 +24,8 @@ import {
     ModalCloseButton,
     useDisclosure,
     Select,
-    HStack
+    HStack,
+    VStack
 } from "@chakra-ui/react";
 import { ApiClientData, UserData, PushMessage } from '../DataStructures';
 import {
@@ -76,13 +77,14 @@ const UserDataView = () => {
                 onOk={() => dispatch((removeUserData as any)(selectedUser))}/>
             <EditUserDescriptionModal isOpen={isOpenEditUserDescription} onClose={onCloseEditUserDescription} selectedUser={selectedUser} setSelectedUserDescription={setSelectedUserDescription}/>
 
-            <Button colorScheme="blue" onClick={onOpenAddUser}>Add User Data</Button>
-
-            <Select placeholder="filter by API-Client" value={apiIdForUsersFilter} onChange={event => {
-                dispatch(setApiIdForUsersFilter((event.target as any).value));
-            }}>
-                {apiClientDatas.map(v => { { return (<option value={v.id} key={v.id}>{v.id}: {v.description}</option>); } })}
-            </Select>
+            <VStack spacing="24px" align='flex-start'>
+                <Button colorScheme="blue" onClick={onOpenAddUser}>Add User Data</Button>
+                <Select placeholder="filter by API-Client" value={apiIdForUsersFilter} onChange={event => {
+                    dispatch(setApiIdForUsersFilter((event.target as any).value));
+                }}>
+                    {apiClientDatas.map(v => { { return (<option value={v.id} key={v.id}>{v.id}: {v.description}</option>); } })}
+                </Select>
+            </VStack>
 
             <Table variant="simple">
                 <TableCaption placement='top'>Users</TableCaption>

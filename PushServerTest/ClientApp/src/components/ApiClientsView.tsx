@@ -89,8 +89,8 @@ const ApiClientsView = () => {
                 <TableCaption placement='top'>API Clients</TableCaption>
                 <Thead>
                     <Tr>
-                        <Th>ID</Th>
                         <Th>Description</Th>
+                        <Th>ID</Th>
                         <Th></Th>
                     </Tr>
                 </Thead>
@@ -99,8 +99,8 @@ const ApiClientsView = () => {
                         showDeleted
                         ? apiClientDatasToShow.map(v => {
                             return <Tr>
-                                <Td>{v.id}</Td>
                                 <Td>{v.description}</Td>
+                                <Td>{v.id}</Td>
                                 <Td>
                                     <HStack spacing="12px">
                                         <Tooltip label="Remove API Client">
@@ -116,9 +116,8 @@ const ApiClientsView = () => {
                         })
                         : apiClientDatasToShow.map(v => {
                             return <Tr>
-                                <Td>{v.id}</Td>
                                 <Td>{v.description}</Td>
-                                {showDeleted && <Td>{v.isDeleted ? 'true' : ''}</Td>}
+                                <Td>{v.id}</Td>
                                 <Td>
                                     <HStack spacing="12px">
                                         <Tooltip label="Show Users">
