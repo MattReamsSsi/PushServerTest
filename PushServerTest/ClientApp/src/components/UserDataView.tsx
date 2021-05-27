@@ -234,7 +234,8 @@ const SendMessageModal = ({ isOpen, onClose, selectedUser }: any) => {
                         Close
                     </Button>
                     <Button colorScheme="blue" onClick={() => {
-                        dispatch((sendPushMessage as any)({ ...selectedUser, title: title, messageBody: messageBody }));
+                        console.log("onClick: " + JSON.stringify(selectedUser));
+                        dispatch((sendPushMessage as any)({ apiClientId: selectedUser.apiClientId, userId: selectedUser.id, title: title, messageBody: messageBody }));
                         setTitle("");
                         setMessageBody("");
                         onClose();
