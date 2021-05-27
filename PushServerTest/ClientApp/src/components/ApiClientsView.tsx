@@ -166,7 +166,7 @@ const AddApiClientModal = ({ isOpen, onClose }: any) => {
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Add User</ModalHeader>
+                <ModalHeader>Add API Client</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <div>
@@ -196,7 +196,7 @@ const AddApiClientModal = ({ isOpen, onClose }: any) => {
                             dispatch((addApiClientData as any)({ id: apiGuid, description: apiDescription }));
                             onClose();
                         }}>
-                        Commit User Data
+                        Commit API Data
                 </Button>
                 </ModalFooter>
             </ModalContent>

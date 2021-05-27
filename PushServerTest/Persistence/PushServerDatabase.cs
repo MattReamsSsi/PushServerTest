@@ -16,7 +16,15 @@ namespace PushServerTest.Persistence
         public static void AddApiClientData(ApiClientData apiClientData)
         {
             using var db = new PushServerDbContext();
-            db.Add(apiClientData);
+            var result = db.ApiClientDatas.FirstOrDefault(b => b.Id == apiClientData.Id);
+            if (result != null)
+            {
+                result.IsDeleted = false;
+            }
+            else
+            {
+                db.Add(apiClientData);
+            }
             db.SaveChanges();
         }
 
