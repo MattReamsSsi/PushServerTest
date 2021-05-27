@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import {
   fetchAll
@@ -7,7 +7,6 @@ import {
 
 import { Container } from 'reactstrap';
 import { NavMenu } from './NavMenu';
-import Sidebar from './Sidebar';
 
 export const Layout = (props) => { 
 
@@ -19,15 +18,7 @@ export const Layout = (props) => {
 
   return (
     <div>
-
-    <NavMenu />
-
-    <Sidebar
-      variant={'sidebar'}
-      isOpen={true}
-      onClose={() => {}}
-    />
-
+      <NavMenu />
       <Container>
         {props.children}
       </Container>
