@@ -45,7 +45,7 @@ namespace PushServerTest.Persistence
         public static List<ApiClientData> GetApiClientDatas()
         {
             using var db = new PushServerDbContext();
-            return db.ApiClientDatas.Where(v => !v.IsDeleted).ToList();
+            return db.ApiClientDatas.ToList();//.Where(v => !v.IsDeleted).ToList();
         }
 
         public static List<UserData> GetUserDatas()

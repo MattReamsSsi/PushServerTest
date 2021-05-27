@@ -243,39 +243,6 @@ const SendMessageModal = ({ isOpen, onClose, selectedUser }: any) => {
     )
 }
 
-// const RemoveUserModal = ({ isOpen, onClose, selectedUser }: any) => {
-
-//     const dispatch = useDispatch();
-//     const description = selectedUser.description;
-
-//     return (
-//         <Modal isOpen={isOpen} onClose={onClose}>
-//             <ModalOverlay />
-//             <ModalContent>
-//                 <ModalHeader>Remove User</ModalHeader>
-//                 <ModalCloseButton />
-
-//                 <ModalBody>
-//                     <div>
-//                         <h2>User ID: {selectedUser.id}</h2>
-//                         <h2>Description: {description}</h2>
-//                     </div>
-//                 </ModalBody>
-
-//                 <ModalFooter>
-//                     <Button colorScheme="blue" mr={3} onClick={onClose}>
-//                         Cancel
-//                     </Button>
-//                     <Button colorScheme="blue" onClick={() => {
-//                         dispatch((removeUserData as any)(selectedUser));
-//                         onClose();
-//                     }}>OK</Button>
-//                 </ModalFooter>
-//             </ModalContent>
-//         </Modal>
-//     )
-// }
-
 const EditUserDescriptionModal = ({ isOpen, onClose, selectedUser, setSelectedUserDescription }: any) => {
 
     const dispatch = useDispatch();
