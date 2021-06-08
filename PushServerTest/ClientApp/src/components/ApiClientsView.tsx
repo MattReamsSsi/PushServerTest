@@ -152,13 +152,10 @@ const ApiClientsView = () => {
     );
 }
 
-const guidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
 const AddApiClientModal = ({ isOpen, onClose }: any) => {
 
     const dispatch = useDispatch();
-    const [apiGuid, setApiGuid] = useState("");
-    const [apiGuidIsValid, setApiGuidIsValid] = useState(false);
+    const [apiNodeId, setApiNodeId] = useState("");
     const [apiDescription, setApiDescription] = useState("");
 
     return (
@@ -175,11 +172,10 @@ const AddApiClientModal = ({ isOpen, onClose }: any) => {
                             const val = (v.target as any).value;
                             setApiDescription(val);
                         }} />
-                        <Text>API Guid: {apiGuid}, Is Valid: {apiGuidIsValid.toString()}</Text>
-                        <Input placeholder="apiGuid" value={apiGuid} onChange={v => {
+                        <Text>API Node ID: {apiNodeId}</Text>
+                        <Input placeholder="api node id" value={apiNodeId} onChange={v => {
                             const val = (v.target as any).value;
-                            setApiGuid(val);
-                            setApiGuidIsValid(guidPattern.test(val));
+                            setApiNodeId(val);
                         }} />
 
                     </div>
@@ -190,9 +186,9 @@ const AddApiClientModal = ({ isOpen, onClose }: any) => {
                     </Button>
                     <Button
                         colorScheme="blue"
-                        isDisabled={!apiGuidIsValid}
+                        isDisabled={!apiNodeId}
                         onClick={() => {
-                            dispatch((addApiClientData as any)({ id: apiGuid, description: apiDescription }));
+                            dispatch((addApiClientData as any)({ nodeId: apiNodeId, description: apiDescription }));
                             onClose();
                         }}>
                         Commit API Data
