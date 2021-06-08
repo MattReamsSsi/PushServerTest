@@ -17,10 +17,10 @@ namespace PushServerTest.Persistence
             modelBuilder.Entity<UserData>()
                 .HasOne<ApiClientData>()
                 .WithMany()
-                .HasForeignKey(v => v.ApiClientId);
+                .HasForeignKey(v => v.ApiNodeId);
 
             modelBuilder.Entity<UserData>()
-                .HasKey(v => new {v.Id, v.ApiClientId});
+                .HasKey(v => new {v.Id, v.ApiNodeId});
         }
     }
 }

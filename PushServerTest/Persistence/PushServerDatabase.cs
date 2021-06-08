@@ -16,7 +16,7 @@ namespace PushServerTest.Persistence
         public static void AddApiClientData(ApiClientData apiClientData)
         {
             using var db = new PushServerDbContext();
-            var result = db.ApiClientDatas.FirstOrDefault(b => b.Id == apiClientData.Id);
+            var result = db.ApiClientDatas.FirstOrDefault(b => b.NodeId == apiClientData.NodeId);
             if (result != null)
             {
                 result.IsDeleted = false;
@@ -31,7 +31,7 @@ namespace PushServerTest.Persistence
         internal static void EditApiDescription(ApiClientData apiClientData)
         {
             using var db = new PushServerDbContext();
-            var result = db.ApiClientDatas.FirstOrDefault(b => b.Id == apiClientData.Id);
+            var result = db.ApiClientDatas.FirstOrDefault(b => b.NodeId == apiClientData.NodeId);
             if (result != null)
             {
                 result.Description = apiClientData.Description;
@@ -42,7 +42,7 @@ namespace PushServerTest.Persistence
         internal static void DeleteApiClient(ApiClientData apiClientData)
         {
             using var db = new PushServerDbContext();
-            var result = db.ApiClientDatas.FirstOrDefault(b => b.Id == apiClientData.Id);
+            var result = db.ApiClientDatas.FirstOrDefault(b => b.NodeId == apiClientData.NodeId);
             if (result != null)
             {
                 result.IsDeleted = true;
@@ -53,7 +53,7 @@ namespace PushServerTest.Persistence
         internal static void RestoreApiClient(ApiClientData apiClientData)
         {
             using var db = new PushServerDbContext();
-            var result = db.ApiClientDatas.FirstOrDefault(b => b.Id == apiClientData.Id);
+            var result = db.ApiClientDatas.FirstOrDefault(b => b.NodeId == apiClientData.NodeId);
             if (result != null)
             {
                 result.IsDeleted = false;
@@ -90,7 +90,7 @@ namespace PushServerTest.Persistence
         internal static void EditUserDescription(UserData userData)
         {
             using var db = new PushServerDbContext();
-            var result = db.UserDatas.FirstOrDefault(b => b.Id == userData.Id && b.ApiClientId == userData.ApiClientId);
+            var result = db.UserDatas.FirstOrDefault(b => b.Id == userData.Id && b.ApiNodeId == userData.ApiNodeId);
             if (result != null)
             {
                 result.Description = userData.Description;
@@ -102,15 +102,15 @@ namespace PushServerTest.Persistence
         {
             using var db = new PushServerDbContext();
 
-            if(!db.ApiClientDatas.Any(v => v.Id == pushMessage.ApiClientId))
+            if(!db.ApiClientDatas.Any(v => v.NodeId == pushMessage.ApiNodeId))
             {
-                db.Add(new ApiClientData { Id = pushMessage.ApiClientId });
+                db.Add(new ApiClientData { NodeId = pushMessage.ApiNodeId });
             }
 
-            var userData = db.UserDatas.FirstOrDefault(v => v.Id == pushMessage.UserId && v.ApiClientId == pushMessage.ApiClientId);
+            var userData = db.UserDatas.FirstOrDefault(v => v.Id == pushMessage.UserId && v.ApiNodeId == pushMessage.ApiNodeId);
             if (userData == null)
             {
-                db.Add(new UserData { Id = pushMessage.UserId, ApiClientId = pushMessage.ApiClientId });
+                db.Add(new UserData { Id = pushMessage.UserId, ApiNodeId = pushMessage.ApiNodeId });
             }
             else
             {
@@ -124,15 +124,15 @@ namespace PushServerTest.Persistence
             using var db = new PushServerDbContext();
             foreach (var messageCount in messagesCounts)
             {
-                if (!db.ApiClientDatas.Any(v => v.Id == messageCount.ApiClientId))
+                if (!db.ApiClientDatas.Any(v => v.NodeId == messageCount.ApiNodeId))
                 {
-                    db.Add(new ApiClientData { Id = messageCount.ApiClientId });
+                    db.Add(new ApiClientData { NodeId = messageCount.ApiNodeId });
                 }
 
-                var userData = db.UserDatas.FirstOrDefault(v => v.Id == messageCount.Id && v.ApiClientId == messageCount.ApiClientId);
+                var userData = db.UserDatas.FirstOrDefault(v => v.Id == messageCount.Id && v.ApiNodeId == messageCount.ApiNodeId);
                 if (userData == null)
                 {
-                    db.Add(new UserData { Id = messageCount.Id, ApiClientId = messageCount.ApiClientId, MessagesCount = messageCount.MessagesCount });
+                    db.Add(new UserData { Id = messageCount.Id, ApiNodeId = messageCount.ApiNodeId, MessagesCount = messageCount.MessagesCount });
                 }
                 else
                 {

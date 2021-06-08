@@ -95,14 +95,14 @@ namespace PushServerTest.Controllers
     {
         public static List<UserData> GetMessagesCountsToAdd(List<PushMessage> pushMessages)
         {
-            var userDatas = pushMessages.Select(v => new UserData{ApiClientId = v.ApiClientId, Id = v.UserId}).ToList();
-            var grouped = userDatas.GroupBy(v => new {v.ApiClientId, v.Id}).ToList();
+            var userDatas = pushMessages.Select(v => new UserData{ApiNodeId = v.ApiNodeId, Id = v.UserId}).ToList();
+            var grouped = userDatas.GroupBy(v => new {v.ApiNodeId, v.Id}).ToList();
             var ret = new List<UserData>();
             foreach (var group in grouped)
             {
                 var userCount = new UserData
                 {
-                    ApiClientId = group.Key.ApiClientId,
+                    ApiNodeId = group.Key.ApiNodeId,
                     Id = group.Key.Id,
                     MessagesCount = group.Count()
                 };
@@ -139,7 +139,7 @@ namespace PushServerTest.Controllers
                     Title = pushMessage.Title,
                     Body = pushMessage.MessageBody
                 },
-                Topic = $"ssi-topic-{pushMessage.ApiClientId}--{pushMessage.UserId}"
+                Topic = $"ssi-topic-{pushMessage.ApiNodeId}--{pushMessage.UserId}"
             };
             return message;
         }
