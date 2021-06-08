@@ -67,13 +67,13 @@ const ApiClientsView = () => {
                 isOpen={isOpenDelete}
                 onClose={onCloseDelete}
                 title={'Remove API Client'}
-                text={`API ID: ${selectedApi.id}\nDescription: ${selectedApi.description}`}
+                text={`API ID: ${selectedApi.nodeId}\nDescription: ${selectedApi.description}`}
                 onOk={() => dispatch((deleteApiClient as any)(selectedApi))}/>
             <YesNoDialog
                 isOpen={isOpenRestore}
                 onClose={onCloseRestore}
                 title={'Restore API Client'}
-                text={`API ID: ${selectedApi.id}\nDescription: ${selectedApi.description}`}
+                text={`API ID: ${selectedApi.nodeId}\nDescription: ${selectedApi.description}`}
                 onOk={() => dispatch((restoreApiClient as any)(selectedApi))}/>
 
             <VStack spacing="24px" align='flex-start'>
@@ -100,7 +100,7 @@ const ApiClientsView = () => {
                         ? apiClientDatasToShow.map(v => {
                             return <Tr>
                                 <Td>{v.description}</Td>
-                                <Td>{v.id}</Td>
+                                <Td>{v.nodeId}</Td>
                                 <Td>
                                     <HStack spacing="12px">
                                         <Tooltip label="Remove API Client">
@@ -117,12 +117,12 @@ const ApiClientsView = () => {
                         : apiClientDatasToShow.map(v => {
                             return <Tr>
                                 <Td>{v.description}</Td>
-                                <Td>{v.id}</Td>
+                                <Td>{v.nodeId}</Td>
                                 <Td>
                                     <HStack spacing="12px">
                                         <Tooltip label="Show Users">
                                             <IconButton aria-label="Show Users" icon={<FontAwesomeIcon icon={faUser}/>} colorScheme="blue"  onClick={() => {
-                                                    dispatch(setApiIdForUsersFilter(v.id));
+                                                    dispatch(setApiIdForUsersFilter(v.nodeId));
                                                     history.push("/user-data");
                                                 }}>
                                             </IconButton>

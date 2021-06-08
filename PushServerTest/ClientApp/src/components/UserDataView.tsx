@@ -55,9 +55,9 @@ const UserDataView = () => {
     const { isOpen: isOpenRemoveUserData, onOpen: onOpenRemoveUserData, onClose: onCloseRemoveUserData } = useDisclosure();
     const { isOpen: isOpenEditUserDescription, onOpen: onOpenEditUserDescription, onClose: onCloseEditUserDescription } = useDisclosure();
 
-    const apiClientIds = apisFiltered.map(v => v.id);
-    const userDatasWithValidApi = userDatas.filter(v => apiClientIds.includes(v.apiClientId));
-    const filteredUserDatas = apiIdForUsersFilter === "" ? userDatasWithValidApi : userDatasWithValidApi.filter(v => v.apiClientId === apiIdForUsersFilter);
+    const apiClientIds = apisFiltered.map(v => v.nodeId);
+    const userDatasWithValidApi = userDatas.filter(v => apiClientIds.includes(v.apiNodeId));
+    const filteredUserDatas = apiIdForUsersFilter === "" ? userDatasWithValidApi : userDatasWithValidApi.filter(v => v.apiNodeId === apiIdForUsersFilter);
 
     const setSelectedUserDescription = (description: string) => setSelectedUser({...selectedUser, description});
 
@@ -79,7 +79,7 @@ const UserDataView = () => {
                 <Select placeholder="filter by API-Client" value={apiIdForUsersFilter} onChange={event => {
                     dispatch(setApiIdForUsersFilter((event.target as any).value));
                 }}>
-                    {apisFiltered.map(v => { { return (<option value={v.id} key={v.id}>{v.id}: {v.description}</option>); } })}
+                    {apisFiltered.map(v => { { return (<option value={v.nodeId} key={v.nodeId}>{v.nodeId}: {v.description}</option>); } })}
                 </Select>
             </VStack>
 
@@ -97,10 +97,10 @@ const UserDataView = () => {
                 <Tbody>
                     {
                         filteredUserDatas.map(v => {
-                            return <Tr key={v.id + v.apiClientId}>
+                            return <Tr key={v.id + v.apiNodeId}>
                                 <Td>{v.description}</Td>
                                 <Td>{v.id}</Td>
-                                <Td>{v.apiClientId}</Td>
+                                <Td>{v.apiNodeId}</Td>
                                 <Td>{v.messagesCount}</Td>
                                 <Td>
                                     <HStack spacing="12px">

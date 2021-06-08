@@ -1,18 +1,18 @@
 export interface ApiClientData {
-    id: string;
+    nodeId: string;
     description: string;
     isDeleted: boolean;
 }
 
 export interface UserData {
     id: string;
-    apiClientId: string;
+    apiNodeId: string;
     messagesCount: number;
     description: string;
 }
 
 export interface PushMessage {
-    apiClientId: string;
+    apiNodeId: string;
     userId: string;
     title: string;
     messageBody: string;
