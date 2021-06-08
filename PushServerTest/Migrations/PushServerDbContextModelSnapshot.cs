@@ -18,8 +18,7 @@ namespace PushServerTest.Migrations
 
             modelBuilder.Entity("PushServerTest.ApiClientData", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("NodeId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -28,7 +27,7 @@ namespace PushServerTest.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("NodeId");
 
                     b.ToTable("ApiClientDatas");
                 });
@@ -38,7 +37,7 @@ namespace PushServerTest.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ApiClientId")
+                    b.Property<string>("ApiNodeId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -47,9 +46,9 @@ namespace PushServerTest.Migrations
                     b.Property<int>("MessagesCount")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id", "ApiClientId");
+                    b.HasKey("Id", "ApiNodeId");
 
-                    b.HasIndex("ApiClientId");
+                    b.HasIndex("ApiNodeId");
 
                     b.ToTable("UserDatas");
                 });
@@ -58,7 +57,7 @@ namespace PushServerTest.Migrations
                 {
                     b.HasOne("PushServerTest.ApiClientData", null)
                         .WithMany()
-                        .HasForeignKey("ApiClientId")
+                        .HasForeignKey("ApiNodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
