@@ -55,8 +55,8 @@ const UserDataView = () => {
     const { isOpen: isOpenRemoveUserData, onOpen: onOpenRemoveUserData, onClose: onCloseRemoveUserData } = useDisclosure();
     const { isOpen: isOpenEditUserDescription, onOpen: onOpenEditUserDescription, onClose: onCloseEditUserDescription } = useDisclosure();
 
-    const apiClientIds = apisFiltered.map(v => v.nodeId);
-    const userDatasWithValidApi = userDatas.filter(v => apiClientIds.includes(v.apiNodeId));
+    const apiNodeIds = apisFiltered.map(v => v.nodeId);
+    const userDatasWithValidApi = userDatas.filter(v => apiNodeIds.includes(v.apiNodeId));
     const filteredUserDatas = apiIdForUsersFilter === "" ? userDatasWithValidApi : userDatasWithValidApi.filter(v => v.apiNodeId === apiIdForUsersFilter);
 
     const setSelectedUserDescription = (description: string) => setSelectedUser({...selectedUser, description});
@@ -143,7 +143,7 @@ const AddUserDataModal = ({ isOpen, onClose }: any) => {
 
     const dispatch = useDispatch();
     const [userGuid, setUserGuid] = useState("");
-    const [apiGuid, setApiGuid] = useState("");
+    const [apiNode, setApiGuid] = useState("");
     const [userGuidIsValid, setUserGuidIsValid] = useState(false);
     const [apiGuidIsValid, setApiGuidIsValid] = useState(false);
     const [userDescription, setUserDescription] = useState("");
@@ -169,8 +169,8 @@ const AddUserDataModal = ({ isOpen, onClose }: any) => {
                             setUserGuid(val);
                             setUserGuidIsValid(guidPattern.test(val));
                         }} />
-                        <Text>ApiGuid: {apiGuid}, Is Valid: {apiGuidIsValid.toString()}</Text>
-                        <Input placeholder="apiGuid" value={apiGuid} onChange={v => {
+                        <Text>ApiGuid: {apiNode}, Is Valid: {apiGuidIsValid.toString()}</Text>
+                        <Input placeholder="apiGuid" value={apiNode} onChange={v => {
                             const val = (v.target as any).value;
                             setApiGuid(val);
                             setApiGuidIsValid(guidPattern.test(val));
@@ -187,7 +187,7 @@ const AddUserDataModal = ({ isOpen, onClose }: any) => {
                         colorScheme="blue"
                         isDisabled={!(userGuidIsValid && apiGuidIsValid)}
                         onClick={() => {
-                            dispatch((addUserData as any)({ id: userGuid, apiClientId: apiGuid, messagesCount: 0, description: userDescription }));
+                            dispatch((addUserData as any)({ id: userGuid, apiNodeId: apiNode, messagesCount: 0, description: userDescription }));
                             onClose();
                         }}>
                         Commit User Data
@@ -213,7 +213,7 @@ const SendMessageModal = ({ isOpen, onClose, selectedUser }: any) => {
 
                 <ModalBody>
                     <div>
-                        <h2>API Client ID: {selectedUser.apiClientId}</h2>
+                        <h2>API Client ID: {selectedUser.apiNodeId}</h2>
                         <h2>User ID: {selectedUser.id}</h2>
                         <Text>Title: {title}</Text>
                         <Input placeholder="title" value={title} onChange={v => setTitle((v.target as any).value)} />
@@ -232,7 +232,7 @@ const SendMessageModal = ({ isOpen, onClose, selectedUser }: any) => {
                     </Button>
                     <Button colorScheme="blue" onClick={() => {
                         console.log("onClick: " + JSON.stringify(selectedUser));
-                        dispatch((sendPushMessage as any)({ apiClientId: selectedUser.apiClientId, userId: selectedUser.id, title: title, messageBody: messageBody }));
+                        dispatch((sendPushMessage as any)({ apiNodeId: selectedUser.apiNodeId, userId: selectedUser.id, title: title, messageBody: messageBody }));
                         setTitle("");
                         setMessageBody("");
                         onClose();
