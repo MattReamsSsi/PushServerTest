@@ -17,6 +17,7 @@ namespace PushServerTest.Controllers
         [HttpGet]
         public string Get()
         {
+            Console.WriteLine("We are in get");
             return "Hello from Push Server API";
         }
 

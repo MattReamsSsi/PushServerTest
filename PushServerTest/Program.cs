@@ -13,6 +13,7 @@ namespace PushServerTest
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine("We are in main222");
             CreateHostBuilder(args).Build().Run();
         }
 
